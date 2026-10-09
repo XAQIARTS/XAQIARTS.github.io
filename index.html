@@ -65,6 +65,29 @@
       <div class="about-text reveal">
         <p>Saqib Maqbool Khan is an AI Generation Artist and creative media specialist based in Wah Cantt, Pakistan. His pipeline spans generative AI, prompt engineering and digital video post-production — from hyper-realistic AI spokespersons and UGC ad creatives to cinematic AI trailers and series.</p>
         <p>Before AI, there was the hand: years of charcoal portraiture, impasto oil painting, murals and Arabic calligraphy. That foundation is why his AI work looks <strong>directed</strong>, not generated.</p>
+        <div class="intro-video-block">
+          <p class="intro-label">Meet Saqib — in his own words</p>
+          <div class="intro-player">
+            <video id="intro-main" src="assets/intro/video2-study-final.mp4" muted loop playsinline preload="metadata"></video>
+            <div class="intro-controls">
+              <button id="intro-mute" title="Mute / unmute">🔊</button>
+              <button id="intro-fs" title="Fullscreen">⛶</button>
+              <a href="assets/intro/video2-study-final.mp4" download title="Download video">⬇</a>
+            </div>
+          </div>
+          <p class="heygen-credit">These intro videos were created with HeyGen.</p>
+          <details class="intro-transcript">
+            <summary>Video transcript</summary>
+            <p>Hello! I'm Saqib — an AI Generation Artist from Pakistan. میں فوٹورئلسٹک AI ویڈیوز، سینمیٹک ایڈز اور وژوئل کنٹینٹ بناتا ہوں جو دیکھنے میں بالکل اصل لگتا ہے — from concept and prompt engineering, to final post-production. I've worked as an AI Video Generation Artist at Ryven Studios, اور میں اپنا کریئیٹو برانڈ ZAQI arts اور بچوں کا اینیمیشن چینل Funday Rhymes بھی چلاتا ہوں۔ My tools: Midjourney, Veo, Runway, Premiere Pro, and After Effects. اگر آپ کو human touch کے ساتھ high-end AI visuals چاہییں — let's talk.</p>
+          </details>
+          <details class="intro-more">
+            <summary>Watch the other two intros</summary>
+            <div class="intro-alt">
+              <figure><video src="assets/intro/video-creator-final.mp4" muted loop playsinline preload="metadata" controls></video><figcaption>Creator look — charcoal studio</figcaption></figure>
+              <figure><video src="assets/intro/video3-blazer-final.mp4" muted loop playsinline preload="metadata" controls></video><figcaption>Blazer look — creative office</figcaption></figure>
+            </div>
+          </details>
+        </div>
         <div class="stats">
           <div class="stat"><b data-count="11">0</b><span>AI client projects</span></div>
           <div class="stat"><b data-count="73">0</b><span>curated artworks</span></div>
@@ -98,16 +121,28 @@
   </div>
 </section>
 
+<!-- CLIENT PROJECTS DIRECTORY -->
+<section id="projects" class="section">
+  <div class="wrap">
+    <p class="sec-kicker reveal">Client Projects</p>
+    <h2 class="sec-title reveal">The <em>directory</em></h2>
+    <p class="sec-lead reveal">Every AI client project from the Ryven Studios era — names, scope and production details, drawn from the original scripts. Click a card to flip it.</p>
+    <div class="work-grid" id="projects-grid"><!-- project cards injected by JS --></div>
+  </div>
+</section>
+
 <!-- 3D GALLERY ALBUM -->
 <section id="gallery" class="section">
   <div class="wrap">
     <p class="sec-kicker reveal">3D Gallery Album</p>
     <h2 class="sec-title reveal">Hand-made <em>worlds</em></h2>
     <p class="sec-lead reveal">Sketches &amp; oil paintings, floating in 3D space. Drag to spin the album.</p>
+    <div class="reveal" style="text-align:center;margin-bottom:22px"><button class="btn" id="open-fullgal">View Complete Gallery</button></div>
     <div class="gallery-tabs reveal">
       <button class="g-tab active" data-album="sketches">Sketches</button>
       <button class="g-tab" data-album="oil-paintings">Oil Paintings</button>
       <button class="g-tab" data-album="illustrations">Illustrations</button>
+      <button class="g-tab" data-album="characters">Pixar 3D Styled Character Storyboard</button>
       <button class="g-tab" data-album="murals">Murals</button>
     </div>
     <div class="album-stage reveal">
@@ -159,5 +194,24 @@
 
 <script src="vendor/three.min.js"></script>
 <script src="js/main.js"></script>
+<!-- lightbox -->
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" id="lb-close" aria-label="Close">×</button>
+  <figure>
+    <img id="lb-img" src="" alt="">
+    <figcaption id="lb-cap"></figcaption>
+    <div class="lb-actions">
+      <a id="lb-dl-behance" href="https://www.behance.net/saqibmaqbool5" target="_blank" rel="noopener">Download via Behance</a>
+      <a id="lb-dl-pinterest" href="https://www.pinterest.com/XAQIarts/" target="_blank" rel="noopener" class="lb-ghost">Download via Pinterest</a>
+    </div>
+  </figure>
+</div>
+<!-- full gallery -->
+<div class="fullgal" id="fullgal">
+  <button class="fg-close" id="fg-close" aria-label="Close">×</button>
+  <h2>Complete Gallery</h2>
+  <p class="fg-sub">Hand-made sketches, oil paintings, illustrations & character sheets — upscaled, free to download.</p>
+  <div class="fg-grid" id="fg-grid"></div>
+</div>
 </body>
 </html>

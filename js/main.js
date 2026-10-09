@@ -97,6 +97,56 @@ PROJECTS.forEach(function(p){
   }
 });
 
+/* ---------- Intro video autoplay on scroll ---------- */
+(function(){
+  var v = document.getElementById('intro-main');
+  if(!v) return;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ v.play().catch(function(){}); }
+      else { v.pause(); }
+    });
+  }, {threshold: 0.4});
+  io.observe(v);
+  var muteBtn = document.getElementById('intro-mute');
+  muteBtn.addEventListener('click', function(){
+    v.muted = !v.muted;
+    muteBtn.textContent = v.muted ? '🔇' : '🔊';
+  });
+  document.getElementById('intro-fs').addEventListener('click', function(){
+    if(v.requestFullscreen) v.requestFullscreen();
+    else if(v.webkitEnterFullscreen) v.webkitEnterFullscreen();
+  });
+})();
+
+/* ---------- Client Projects directory ---------- */
+var PROJECTS = [
+  {name:"AYMS Fence", tag:"AI Spokesperson Ad", desc:"Photorealistic AI spokesperson ad for a fence company in Katy, Texas. Full pipeline: AI image → upscale → animate, edited shot-by-shot from the client's implied sequence."},
+  {name:"Binder Notebook", tag:"Anime Teaser", desc:"Soft anime/manga-style “Coming Soon” teaser for a leather-bound planner. Cut to the client's script across 18 scenes plus outro, with Japanese-styled captions."},
+  {name:"Boom Boon", tag:"3D Mascot Ad", desc:"Kids dental ad starring Boom & Boon — 3D loofah-puppet mascots. Built from the client's instruction brief, polished from raw animation to broadcast-ready."},
+  {name:"Thrones of Ash", tag:"Cinematic Fantasy Explainer", desc:"Cinematic AI fantasy explainer in a Game-of-Thrones register. Thirteen shots assembled from two source reels into a trailer-grade narrative."},
+  {name:"House Siege AAA", tag:"Game Trailer", desc:"AAA-style AI game trailer for a house-siege title. Beat-by-beat edit from 19 themed scene folders, with poster art and an alternate outro."},
+  {name:"JIYU Korean Beauty", tag:"UGC Ad Campaign", desc:"AI halmoni (grandmother) UGC-style K-beauty ads. Multiple script angles produced from the client's script documents and voice-cloned reads."},
+  {name:"KLING Animation Tests", tag:"Character Animation Study", desc:"Character animation tests on the KLING model — 7 clips exploring motion fidelity for an urgent client delivery."},
+  {name:"Red Star Retreat", tag:"Property Film + AI Avatar", desc:"AI property marketing film with an avatar spokesperson. Trailer scripts plus 50+ alternate reels, long-form and avatar-variant cuts."},
+  {name:"Soralya Footwear", tag:"Pixar-Style Explainer", desc:"Pixar-style 3D foot-anatomy explainers for a footwear brand. 26 clips plus hooks, cut to the UGC script and visual blueprint."},
+  {name:"SPNutrition", tag:"15+ UGC Supplement Ads", desc:"Animated UGC supplement ads — 15+ individual video projects (Aug ad, TAB series, New-folder drops), each cut to its own script PDF. The largest single-client batch in the vault."},
+  {name:"The Bronx King", tag:"AI Series Trailer", desc:"Dark urban-fantasy AI series trailer. Cut from 500+ episode clips across e01–e04 with the 8-page Global Visual Bible as the style authority."}
+];
+(function(){
+  var grid = document.getElementById('projects-grid');
+  if(!grid) return;
+  PROJECTS.forEach(function(p){
+    var card = document.createElement('article');
+    card.className = 'work-card proj-card reveal visible';
+    card.innerHTML =
+      '<div class="proj-inner"><div class="proj-front work-body"><b>'+p.name+'</b><p>'+p.tag+'</p><span class="work-tag">Click to flip</span></div>'+
+      '<div class="proj-back work-body"><b>'+p.name+'</b><p>'+p.desc+'</p></div></div>';
+    card.addEventListener('click', function(){ card.classList.toggle('open'); });
+    grid.appendChild(card);
+  });
+})();
+
 /* ---------- Extended Cuts album (extra edits) ---------- */
 (function(){
   var xgrid = document.getElementById('extended-grid');
@@ -140,11 +190,41 @@ function buildAlbum(name){
       var img = document.createElement('img');
       img.src = 'assets/img/'+name+'/'+f; img.alt = prettyName(f); img.loading = 'lazy';
       d.appendChild(img); ring.appendChild(d); items.push(d);
-      d.addEventListener('click', function(){ focusItem(i); });
+      d.addEventListener('click', function(){ openLightbox('assets/img/'+name+'/'+f, prettyName(f)); });
     });
     updateRing(); focusItem(0);
   });
 }
+/* lightbox */
+var lb = document.getElementById('lightbox');
+function openLightbox(src, cap){
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-cap').textContent = cap;
+  lb.classList.add('open'); document.body.style.overflow = 'hidden';
+}
+function closeLightbox(){ lb.classList.remove('open'); document.body.style.overflow = ''; }
+document.getElementById('lb-close').addEventListener('click', closeLightbox);
+lb.addEventListener('click', function(e){ if(e.target === lb) closeLightbox(); });
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeLightbox(); closeFullgal(); } });
+/* full gallery */
+var fg = document.getElementById('fullgal');
+function openFullgal(){
+  var grid = document.getElementById('fg-grid'); grid.innerHTML = '';
+  fetch('assets/img/manifest.json').then(function(r){ return r.json(); }).then(function(m){
+    Object.keys(m).forEach(function(album){
+      m[album].forEach(function(f){
+        var src = 'assets/img/'+album+'/'+f;
+        var card = document.createElement('div'); card.className = 'fg-card';
+        card.innerHTML = '<img loading="lazy" src="'+src+'" alt="'+prettyName(f)+'"><div class="fg-bar"><span>'+prettyName(f)+'</span><a href="'+src+'" download>Download</a></div>';
+        grid.appendChild(card);
+      });
+    });
+    fg.classList.add('open'); document.body.style.overflow = 'hidden';
+  });
+}
+function closeFullgal(){ fg.classList.remove('open'); document.body.style.overflow = ''; }
+document.getElementById('open-fullgal').addEventListener('click', openFullgal);
+document.getElementById('fg-close').addEventListener('click', closeFullgal);
 function updateRing(){ ring.style.transform = 'translateZ(-'+radius+'px) rotateY('+angle+'deg)'; }
 function focusItem(i){
   items.forEach(function(d){ d.classList.remove('focus'); });
