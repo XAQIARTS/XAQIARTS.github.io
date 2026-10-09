@@ -121,17 +121,17 @@ PROJECTS.forEach(function(p){
 
 /* ---------- Client Projects directory ---------- */
 var PROJECTS = [
-  {name:"AYMS Fence", tag:"AI Spokesperson Ad", desc:"Photorealistic AI spokesperson ad for a fence company in Katy, Texas. Full pipeline: AI image → upscale → animate, edited shot-by-shot from the client's implied sequence."},
-  {name:"Binder Notebook", tag:"Anime Teaser", desc:"Soft anime/manga-style “Coming Soon” teaser for a leather-bound planner. Cut to the client's script across 18 scenes plus outro, with Japanese-styled captions."},
-  {name:"Boom Boon", tag:"3D Mascot Ad", desc:"Kids dental ad starring Boom & Boon — 3D loofah-puppet mascots. Built from the client's instruction brief, polished from raw animation to broadcast-ready."},
-  {name:"Thrones of Ash", tag:"Cinematic Fantasy Explainer", desc:"Cinematic AI fantasy explainer in a Game-of-Thrones register. Thirteen shots assembled from two source reels into a trailer-grade narrative."},
-  {name:"House Siege AAA", tag:"Game Trailer", desc:"AAA-style AI game trailer for a house-siege title. Beat-by-beat edit from 19 themed scene folders, with poster art and an alternate outro."},
-  {name:"JIYU Korean Beauty", tag:"UGC Ad Campaign", desc:"AI halmoni (grandmother) UGC-style K-beauty ads. Multiple script angles produced from the client's script documents and voice-cloned reads."},
-  {name:"KLING Animation Tests", tag:"Character Animation Study", desc:"Character animation tests on the KLING model — 7 clips exploring motion fidelity for an urgent client delivery."},
-  {name:"Red Star Retreat", tag:"Property Film + AI Avatar", desc:"AI property marketing film with an avatar spokesperson. Trailer scripts plus 50+ alternate reels, long-form and avatar-variant cuts."},
-  {name:"Soralya Footwear", tag:"Pixar-Style Explainer", desc:"Pixar-style 3D foot-anatomy explainers for a footwear brand. 26 clips plus hooks, cut to the UGC script and visual blueprint."},
-  {name:"SPNutrition", tag:"15+ UGC Supplement Ads", desc:"Animated UGC supplement ads — 15+ individual video projects (Aug ad, TAB series, New-folder drops), each cut to its own script PDF. The largest single-client batch in the vault."},
-  {name:"The Bronx King", tag:"AI Series Trailer", desc:"Dark urban-fantasy AI series trailer. Cut from 500+ episode clips across e01–e04 with the 8-page Global Visual Bible as the style authority."}
+  {name:"AYMS Fence", tag:"AI Spokesperson Ad", brief:"A fence company in Katy, Texas needed a photorealistic AI spokesperson ad — no shoot, no crew.", did:"Built the spokesperson with AI image → upscale → animate, and edited the final ad shot-by-shot from the client's implied sequence.", result:"A broadcast-ready spokesperson spot delivered from pure AI pipeline."},
+  {name:"Binder Notebook", tag:"Anime Teaser", brief:"A leather-bound planner brand wanted a soft anime/manga “Coming Soon” teaser.", did:"Cut 18 scenes plus outro to the client's script, with Japanese-styled captions and pacing.", result:"A teaser that feels hand-drawn, built entirely from AI frames."},
+  {name:"Boom Boon", tag:"3D Mascot Ad", brief:"A kids dental brand needed an ad starring its 3D loofah-puppet mascots, Boom & Boon.", did:"Animated and polished the mascots from the client's instruction brief to a finished spot.", result:"A playful, kid-safe mascot ad ready for broadcast."},
+  {name:"Thrones of Ash", tag:"Cinematic Fantasy Explainer", brief:"A cinematic AI fantasy explainer in a Game-of-Thrones register.", did:"Assembled thirteen shots from two source reels into one trailer-grade narrative.", result:"A fantasy trailer with genuine cinematic weight."},
+  {name:"House Siege AAA", tag:"Game Trailer", brief:"An AAA-style AI game trailer for a house-siege title.", did:"Edited beat-by-beat from 19 themed scene folders, with poster art and an alternate outro.", result:"A game trailer that could sit beside real AAA announces."},
+  {name:"JIYU Korean Beauty", tag:"UGC Ad Campaign", brief:"K-beauty brand JIYU wanted AI halmoni (grandmother) UGC-style ads.", did:"Produced multiple script angles from the client's scripts and voice-cloned reads.", result:"A full UGC ad set with authentic halmoni warmth."},
+  {name:"KLING Animation Tests", tag:"Character Animation Study", brief:"An urgent client delivery needed character animation tests on the KLING model.", did:"Ran 7 clips exploring motion fidelity under a tight deadline.", result:"Client-ready motion tests, delivered fast."},
+  {name:"Red Star Retreat", tag:"Property Film + AI Avatar", brief:"A retreat property needed AI marketing films plus an avatar spokesperson.", did:"Cut the hero film from trailer scripts, then 50+ alternate reels, long-form and avatar variants.", result:"A complete property-film package in every ratio."},
+  {name:"Soralya Footwear", tag:"Pixar-Style Explainer", brief:"A footwear brand wanted Pixar-style 3D foot-anatomy explainers.", did:"Cut 26 clips plus hooks to the UGC script and visual blueprint.", result:"Explainers that make anatomy feel delightful."},
+  {name:"SPNutrition", tag:"15+ UGC Supplement Ads", brief:"A supplement brand needed animated UGC ads — 15+ individual video projects.", did:"Cut each project (Aug ad, TAB series, New-folder drops) to its own script PDF — the largest single-client batch in the vault.", result:"15+ finished supplement ads, each scripted and shipped."},
+  {name:"The Bronx King", tag:"AI Series Trailer", brief:"A dark urban-fantasy AI series needed its trailer.", did:"Cut from 500+ episode clips across e01–e04, with the 8-page Global Visual Bible as style authority.", result:"A series trailer with real cinematic menace."}
 ];
 (function(){
   var grid = document.getElementById('projects-grid');
@@ -141,7 +141,7 @@ var PROJECTS = [
     card.className = 'work-card proj-card reveal visible';
     card.innerHTML =
       '<div class="proj-inner"><div class="proj-front work-body"><b>'+p.name+'</b><p>'+p.tag+'</p><span class="work-tag">Click to flip</span></div>'+
-      '<div class="proj-back work-body"><b>'+p.name+'</b><p>'+p.desc+'</p></div></div>';
+      '<div class="proj-back work-body"><b>'+p.name+'</b><p><strong>Brief:</strong> '+p.brief+'</p><p><strong>What I did:</strong> '+p.did+'</p><p><strong>Result:</strong> '+p.result+'</p></div></div>';
     card.addEventListener('click', function(){ card.classList.toggle('open'); });
     grid.appendChild(card);
   });
