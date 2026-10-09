@@ -81,7 +81,7 @@ PROJECTS.forEach(function(p){
   card.className = 'work-card reveal';
   var v = VIDEOS[p.slug];
   var media = v
-    ? '<video src="'+v+'" muted loop playsinline preload="metadata"></video><div class="work-play">▶</div>'
+    ? '<video src="'+v+'" poster="assets/video/thumbs/'+p.slug+'.jpg" muted loop playsinline preload="none"></video><div class="work-play">▶</div>'
     : '<div class="work-soon">Film in the edit bay — premiering soon</div>';
   card.innerHTML =
     '<div class="work-thumb">'+media+'</div>'+
@@ -159,7 +159,7 @@ var PROJECTS = [
       var card = document.createElement('article');
       card.className = 'work-card reveal visible';
       card.innerHTML =
-        '<div class="work-thumb"><video src="assets/video-extra/'+p.slug+'.mp4" muted loop playsinline preload="metadata"></video><div class="work-play">▶</div></div>'+
+        '<div class="work-thumb"><video src="assets/video-extra/'+p.slug+'.mp4" poster="assets/video-extra/thumbs/'+p.slug+'.jpg" muted loop playsinline preload="none"></video><div class="work-play">▶</div></div>'+
         '<div class="work-body"><b>'+p.title+'</b><p>'+p.desc+'</p><span class="work-tag">'+p.tag+'</span></div>';
       xgrid.appendChild(card);
       var vid = card.querySelector('video');
