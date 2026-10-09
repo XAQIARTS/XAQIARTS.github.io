@@ -97,6 +97,30 @@ PROJECTS.forEach(function(p){
   }
 });
 
+/* ---------- Claymorphism ripple on Pixar-style clicks ---------- */
+function clayRipple(){
+  document.body.classList.remove('clay-time');
+  void document.body.offsetWidth;
+  document.body.classList.add('clay-time');
+  setTimeout(function(){ document.body.classList.remove('clay-time'); }, 700);
+}
+document.addEventListener('click', function(e){
+  if(e.target.closest('.proj-card') || e.target.closest('.album-item') || e.target.closest('#projects-grid')){
+    clayRipple();
+  }
+});
+/* ---------- Spatial parallax on mouse ---------- */
+(function(){
+  var layers = document.querySelectorAll('.sec-title, .sec-kicker');
+  if(!window.matchMedia('(pointer:fine)').matches) return;
+  document.addEventListener('mousemove', function(e){
+    var x = (e.clientX / window.innerWidth - .5), y = (e.clientY / window.innerHeight - .5);
+    layers.forEach(function(el, i){
+      var depth = (i % 3 + 1) * 4;
+      el.style.transform = 'translate('+(x*depth)+'px,'+(y*depth)+'px)';
+    });
+  });
+})();
 /* ---------- Intro video autoplay on scroll ---------- */
 (function(){
   var v = document.getElementById('intro-main');

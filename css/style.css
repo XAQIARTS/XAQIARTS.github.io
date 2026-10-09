@@ -200,3 +200,71 @@ footer{border-top:1px solid var(--line);padding:44px 0;text-align:center;color:v
   .album-item{width:200px;height:270px;left:-100px;top:-135px}
   .section{padding:80px 0}
 }
+
+/* ============ SPATIAL UI — global depth layer ============ */
+.section{position:relative}
+.section::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(ellipse 60% 40% at 50% 0%,rgba(224,35,122,.06),transparent 70%)}
+.wrap{position:relative;z-index:1}
+.spatial-float{animation:spatialFloat 7s ease-in-out infinite}
+@keyframes spatialFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+/* ============ LIQUID GLASS — AI Work + About ============ */
+#ai-work .work-card,#about .intro-video-block{
+  background:linear-gradient(135deg,rgba(255,255,255,.14),rgba(255,255,255,.04));
+  -webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);
+  border:1px solid rgba(255,255,255,.25);border-radius:22px;
+  box-shadow:0 8px 32px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.35),inset 0 -1px 0 rgba(255,255,255,.08);
+  position:relative;overflow:hidden}
+#ai-work .work-card::before,#about .intro-video-block::before{
+  content:"";position:absolute;top:0;left:-60%;width:50%;height:100%;pointer-events:none;
+  background:linear-gradient(105deg,transparent,rgba(255,255,255,.22),transparent);
+  transform:skewX(-20deg);transition:left .8s}
+#ai-work .work-card:hover::before,#about .intro-video-block:hover::before{left:130%}
+#ai-work .work-thumb{border-radius:16px 16px 0 0}
+
+/* ============ GLASSMORPHISM — Extended Cuts ============ */
+#extended .work-card{
+  background:rgba(255,255,255,.07);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  border:1px solid rgba(255,255,255,.16);border-radius:20px;
+  box-shadow:0 12px 40px rgba(0,0,0,.22)}
+
+/* ============ BENTO GRID — Projects directory ============ */
+#projects-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:18px}
+#projects-grid .proj-card:nth-child(1){grid-column:span 4}
+#projects-grid .proj-card:nth-child(2){grid-column:span 2}
+#projects-grid .proj-card:nth-child(3){grid-column:span 2}
+#projects-grid .proj-card:nth-child(4){grid-column:span 2}
+#projects-grid .proj-card:nth-child(5){grid-column:span 2}
+#projects-grid .proj-card:nth-child(n+6){grid-column:span 3}
+#projects-grid .proj-card{min-height:190px}
+@media(max-width:760px){#projects-grid .proj-card{grid-column:span 6 !important}}
+
+/* ============ NEUMORPHISM — Collaborations ============ */
+#collab .collab-card{
+  background:var(--bg2);border-radius:22px;border:none;
+  box-shadow:9px 9px 22px rgba(0,0,0,.28),-9px -9px 22px rgba(255,255,255,.06),inset 0 0 0 rgba(0,0,0,0);
+  transition:box-shadow .3s,transform .3s}
+#collab .collab-card:hover{
+  box-shadow:4px 4px 12px rgba(0,0,0,.25),-4px -4px 12px rgba(255,255,255,.05),inset 3px 3px 8px rgba(0,0,0,.18);
+  transform:translateY(-3px)}
+
+/* ============ CLAYMORPHISM — Achievements ============ */
+#achievements .achieve-card{
+  background:linear-gradient(145deg,#ffd9e8,#f7b8d4);border-radius:28px;border:none;
+  box-shadow:12px 12px 28px rgba(0,0,0,.22),-8px -8px 20px rgba(255,255,255,.35),inset 4px 4px 10px rgba(255,255,255,.5),inset -4px -4px 10px rgba(190,60,120,.25);
+  color:#4a1030}
+#achievements .achieve-card figcaption span{color:#6b2044}
+#achievements .achieve-card img{border-radius:20px;margin:14px;width:calc(100% - 28px)}
+#achievements .sec-kicker{color:#c2145f}
+
+/* ============ CLAY SQUISH — Pixar click ripple ============ */
+@keyframes claySquish{0%{transform:scale(1)}30%{transform:scale(.965,.94)}55%{transform:scale(1.02,1.035)}75%{transform:scale(.995)}100%{transform:scale(1)}}
+body.clay-time .section{animation:claySquish .55s cubic-bezier(.3,1.4,.4,1)}
+body.clay-time .work-card,body.clay-time .collab-card{animation:claySquish .55s cubic-bezier(.3,1.4,.4,1) .06s}
+
+/* ============ LIQUID GLASS nav ============ */
+nav{
+  background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.03)) !important;
+  -webkit-backdrop-filter:blur(20px) saturate(1.5);backdrop-filter:blur(20px) saturate(1.5);
+  border-bottom:1px solid rgba(255,255,255,.18) !important;
+  box-shadow:0 8px 32px rgba(0,0,0,.12),inset 0 1px 0 rgba(255,255,255,.25)}
