@@ -97,6 +97,30 @@ PROJECTS.forEach(function(p){
   }
 });
 
+/* ---------- Extended Cuts album (extra edits) ---------- */
+(function(){
+  var xgrid = document.getElementById('extended-grid');
+  if(!xgrid) return;
+  fetch('assets/video-extra/manifest.json').then(function(r){
+    if(!r.ok) throw 0; return r.json();
+  }).then(function(list){
+    if(!list || !list.length){ document.getElementById('extended').style.display='none'; return; }
+    list.forEach(function(p){
+      var card = document.createElement('article');
+      card.className = 'work-card reveal visible';
+      card.innerHTML =
+        '<div class="work-thumb"><video src="assets/video-extra/'+p.slug+'.mp4" muted loop playsinline preload="metadata"></video><div class="work-play">▶</div></div>'+
+        '<div class="work-body"><b>'+p.title+'</b><p>'+p.desc+'</p><span class="work-tag">'+p.tag+'</span></div>';
+      xgrid.appendChild(card);
+      var vid = card.querySelector('video');
+      card.querySelector('.work-thumb').addEventListener('click', function(){
+        if(vid.paused){ vid.muted = false; vid.play(); card.querySelector('.work-play').style.display='none'; }
+        else { vid.pause(); vid.muted = true; card.querySelector('.work-play').style.display='flex'; }
+      });
+    });
+  }).catch(function(){ document.getElementById('extended').style.display='none'; });
+})();
+
 /* ---------- 3D album ring gallery ---------- */
 var ring = document.getElementById('album-ring');
 var caption = document.getElementById('album-caption');
