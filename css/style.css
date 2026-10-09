@@ -128,6 +128,14 @@ a{color:inherit;text-decoration:none}
 .collab-card img{max-width:140px;max-height:90px;object-fit:contain;filter:grayscale(.2)}
 .collab-card:hover img{filter:none}
 .collab-text{justify-content:center;min-height:150px;font-size:19px}
+/* achievements */
+.achieve-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:22px}
+.achieve-card{margin:0;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:var(--bg2);transition:transform .3s}
+.achieve-card:hover{transform:perspective(900px) rotateX(3deg) translateY(-6px)}
+.achieve-card img{width:100%;height:300px;object-fit:cover;display:block;cursor:pointer}
+.achieve-card figcaption{padding:18px}
+.achieve-card figcaption b{display:block;margin-bottom:6px;font-size:17px}
+.achieve-card figcaption span{opacity:.75;font-size:14px}
 /* lightbox */
 .lightbox{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;background:rgba(5,5,12,.92);backdrop-filter:blur(10px)}
 .lightbox.open{display:flex;animation:lbIn .25s ease-out}

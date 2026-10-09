@@ -225,6 +225,10 @@ function openFullgal(){
 function closeFullgal(){ fg.classList.remove('open'); document.body.style.overflow = ''; }
 document.getElementById('open-fullgal').addEventListener('click', openFullgal);
 document.getElementById('fg-close').addEventListener('click', closeFullgal);
+/* achievement images open in lightbox */
+document.querySelectorAll('.achieve-card img').forEach(function(img){
+  img.addEventListener('click', function(){ openLightbox(img.src, img.alt); });
+});
 function updateRing(){ ring.style.transform = 'translateZ(-'+radius+'px) rotateY('+angle+'deg)'; }
 function focusItem(i){
   items.forEach(function(d){ d.classList.remove('focus'); });
