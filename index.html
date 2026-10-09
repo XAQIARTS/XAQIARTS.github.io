@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>XAQI ARTS — Saqib Maqbool Khan | AI Generation Artist</title>
+<meta name="description" content="Saqib Maqbool Khan (XAQI arts) — AI Generation Artist. AI films, UGC ads, illustrations, oil paintings, murals and sketches.">
+<link rel="icon" type="image/png" href="assets/logo/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- LOGO WELCOME -->
+<div id="loader" aria-hidden="true">
+  <div class="loader-inner">
+    <img src="assets/logo/logo.png" alt="XAQI arts logo" class="loader-logo">
+    <div class="loader-tag">welcome to the universe of</div>
+    <div class="loader-name">XAQI ARTS</div>
+    <div class="loader-bar"><span></span></div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#hero" class="nav-brand"><img src="assets/logo/logo.png" alt="XAQI arts"><span>XAQI ARTS</span></a>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#ai-work">AI Work</a>
+    <a href="#gallery">Gallery</a>
+    <a href="#portfolio">Portfolio</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <button id="theme-toggle" aria-label="Toggle light / dark theme">◐</button>
+</nav>
+
+<!-- HERO -->
+<header id="hero">
+  <canvas id="hero-3d"></canvas>
+  <div class="hero-content">
+    <p class="hero-kicker reveal">AI Generation Artist · Visual Storyteller</p>
+    <h1 class="hero-title reveal">SAQIB<br>MAQBOOL KHAN</h1>
+    <p class="hero-sub reveal">I craft cinematic AI films, scroll-stopping UGC ads and hand-made art — from photorealistic avatars to oil &amp; charcoal.</p>
+    <div class="hero-ctas reveal">
+      <a href="#ai-work" class="btn btn-primary">Watch the Work</a>
+      <a href="#gallery" class="btn btn-ghost">3D Gallery</a>
+    </div>
+  </div>
+  <div class="scroll-hint" aria-hidden="true"><span></span></div>
+</header>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="marquee-track"></div>
+</div>
+
+<!-- ABOUT -->
+<section id="about" class="section">
+  <div class="wrap">
+    <p class="sec-kicker reveal">About</p>
+    <h2 class="sec-title reveal">The artist behind <em>XAQI arts</em></h2>
+    <div class="about-grid">
+      <div class="about-text reveal">
+        <p>Saqib Maqbool Khan is an AI Generation Artist and creative media specialist based in Wah Cantt, Pakistan. His pipeline spans generative AI, prompt engineering and digital video post-production — from hyper-realistic AI spokespersons and UGC ad creatives to cinematic AI trailers and series.</p>
+        <p>Before AI, there was the hand: years of charcoal portraiture, impasto oil painting, murals and Arabic calligraphy. That foundation is why his AI work looks <strong>directed</strong>, not generated.</p>
+        <div class="stats">
+          <div class="stat"><b data-count="11">0</b><span>AI client projects</span></div>
+          <div class="stat"><b data-count="73">0</b><span>curated artworks</span></div>
+          <div class="stat"><b data-count="15">0</b><span>years of craft</span></div>
+        </div>
+      </div>
+      <div class="about-3d reveal">
+        <div class="orb" aria-hidden="true"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AI CLIENT WORK -->
+<section id="ai-work" class="section">
+  <div class="wrap">
+    <p class="sec-kicker reveal">AI Client Work</p>
+    <h2 class="sec-title reveal">Generated with <em>intent</em></h2>
+    <p class="sec-lead reveal">Real client projects from Ryven Studios — each cut to its script, each built shot by shot.</p>
+    <div class="work-grid" id="work-grid"><!-- video cards injected by JS --></div>
+  </div>
+</section>
+
+<!-- 3D GALLERY ALBUM -->
+<section id="gallery" class="section">
+  <div class="wrap">
+    <p class="sec-kicker reveal">3D Gallery Album</p>
+    <h2 class="sec-title reveal">Hand-made <em>worlds</em></h2>
+    <p class="sec-lead reveal">Sketches &amp; oil paintings, floating in 3D space. Drag to spin the album.</p>
+    <div class="gallery-tabs reveal">
+      <button class="g-tab active" data-album="sketches">Sketches</button>
+      <button class="g-tab" data-album="oil-paintings">Oil Paintings</button>
+      <button class="g-tab" data-album="illustrations">Illustrations</button>
+      <button class="g-tab" data-album="murals">Murals</button>
+    </div>
+    <div class="album-stage reveal">
+      <div class="album-ring" id="album-ring"><!-- items injected by JS --></div>
+      <div class="album-controls">
+        <button id="album-prev" aria-label="Previous">‹</button>
+        <button id="album-next" aria-label="Next">›</button>
+      </div>
+    </div>
+    <div class="album-caption" id="album-caption"></div>
+  </div>
+</section>
+
+<!-- PORTFOLIO -->
+<section id="portfolio" class="section">
+  <div class="wrap">
+    <p class="sec-kicker reveal">Portfolio</p>
+    <h2 class="sec-title reveal">Everywhere the work <em>lives</em></h2>
+    <div class="pf-grid">
+      <a class="pf-card reveal" href="https://www.behance.net/saqibmaqbool5" target="_blank" rel="noopener">
+        <b>Behance</b><span>Full curated portfolio — projects, videos &amp; case studies</span><i>↗</i>
+      </a>
+      <a class="pf-card reveal" href="https://www.pinterest.com/XAQIarts/" target="_blank" rel="noopener">
+        <b>Pinterest</b><span>Moodboards, artwork drops &amp; visual inspiration</span><i>↗</i>
+      </a>
+      <a class="pf-card reveal" href="https://github.com/XAQIARTS" target="_blank" rel="noopener">
+        <b>GitHub</b><span>Open-source code — including this very website</span><i>↗</i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="section">
+  <div class="wrap">
+    <p class="sec-kicker reveal">Contact</p>
+    <h2 class="sec-title reveal">Let's make something <em>unreal</em></h2>
+    <p class="sec-lead reveal">Brand films, UGC ad creatives, AI trailers — or a portrait in charcoal.</p>
+    <div class="social-row reveal" id="social-row"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <img src="assets/logo/logo.png" alt="XAQI arts logo" class="foot-logo">
+    <p>© 2026 Saqib Maqbool Khan · XAQI arts — crafted with open-source tools. This site's code is public on GitHub.</p>
+  </div>
+</footer>
+
+<script src="vendor/three.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
