@@ -1,14 +1,6 @@
 /* ============ XAQI ARTS — main.js ============ */
 (function(){
 "use strict";
-/* visible error reporter — shows JS errors on screen for debugging */
-window.addEventListener('error', function(e){
-  var d = document.getElementById('js-error-report');
-  if(!d){ d = document.createElement('div'); d.id = 'js-error-report';
-    d.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#a00;color:#fff;padding:8px;font:12px monospace;z-index:99999;white-space:pre-wrap;';
-    document.body.appendChild(d); }
-  d.textContent += 'JS ERROR: ' + (e.message || e.error) + ' @' + (e.lineno || '?') + '\n';
-});
 
 /* ---------- loader : logo welcome (fast — never waits on full page load) ---------- */
 var loaderHidden = false;
