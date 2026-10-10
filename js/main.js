@@ -2,14 +2,16 @@
 (function(){
 "use strict";
 
-/* ---------- loader : logo welcome ---------- */
+/* ---------- loader : logo welcome (fast — never waits on full page load) ---------- */
 var loaderHidden = false;
 function hideLoader(){
   if(loaderHidden) return; loaderHidden = true;
   document.getElementById('loader').classList.add('done');
 }
-window.addEventListener('load', function(){ setTimeout(hideLoader, 2100); });
-setTimeout(hideLoader, 4200); // safety
+if(document.readyState === 'loading'){
+  document.addEventListener('DOMContentLoaded', function(){ setTimeout(hideLoader, 900); });
+}else{ setTimeout(hideLoader, 900); }
+setTimeout(hideLoader, 2600); // safety
 
 /* ---------- theme : light / dark ---------- */
 var root = document.documentElement;
@@ -47,6 +49,19 @@ var cio = new IntersectionObserver(function(es){
 },{threshold:.6});
 document.querySelectorAll('[data-count]').forEach(function(b){ cio.observe(b); });
 
+/* ---------- lazy video posters : only fetch near viewport ---------- */
+var pio = new IntersectionObserver(function(es){
+  es.forEach(function(e){
+    if(!e.isIntersecting) return;
+    var v = e.target;
+    if(v.dataset.poster){ v.poster = v.dataset.poster; v.removeAttribute('data-poster'); }
+    pio.unobserve(v);
+  });
+},{rootMargin:'500px 0px'});
+function watchPosters(root){
+  (root || document).querySelectorAll('video[data-poster]').forEach(function(v){ pio.observe(v); });
+}
+
 /* ---------- AI work cards ---------- */
 var PROJECTS = [
   {slug:'ayms-fence',    title:'AYMS Fence — AI Spokesperson Ad', tag:'Photorealistic AI', desc:'Cedar-fence company, Katy TX. Full pipeline: generate → upscale → animate (lip-sync) → assemble.'},
@@ -81,13 +96,14 @@ PROJECTS.forEach(function(p){
   card.className = 'work-card reveal';
   var v = VIDEOS[p.slug];
   var media = v
-    ? '<video src="'+v+'" poster="assets/video/thumbs/'+p.slug+'.jpg" muted loop playsinline preload="none"></video><div class="work-play">▶</div>'
+    ? '<video src="'+v+'" data-poster="assets/video/thumbs/'+p.slug+'.jpg" muted loop playsinline preload="none"></video><div class="work-play">▶</div>'
     : '<div class="work-soon">Film in the edit bay — premiering soon</div>';
   card.innerHTML =
     '<div class="work-thumb">'+media+'</div>'+
     '<div class="work-body"><b>'+p.title+'</b><p>'+p.desc+'</p><span class="work-tag">'+p.tag+'</span></div>';
   grid.appendChild(card);
   io.observe(card);
+  watchPosters(card);
   var vid = card.querySelector('video');
   if(vid){
     card.querySelector('.work-thumb').addEventListener('click', function(){
@@ -206,9 +222,10 @@ var PROJECTS = [
       var card = document.createElement('article');
       card.className = 'work-card reveal visible';
       card.innerHTML =
-        '<div class="work-thumb"><video src="assets/video-extra/'+p.slug+'.mp4" poster="assets/video-extra/thumbs/'+p.slug+'.jpg" muted loop playsinline preload="none"></video><div class="work-play">▶</div></div>'+
+        '<div class="work-thumb"><video src="assets/video-extra/'+p.slug+'.mp4" data-poster="assets/video-extra/thumbs/'+p.slug+'.jpg" muted loop playsinline preload="none"></video><div class="work-play">▶</div></div>'+
         '<div class="work-body"><b>'+p.title+'</b><p>'+p.desc+'</p><span class="work-tag">'+p.tag+'</span></div>';
       xgrid.appendChild(card);
+      watchPosters(card);
       var vid = card.querySelector('video');
       card.querySelector('.work-thumb').addEventListener('click', function(){
         if(vid.paused){ vid.muted = false; vid.play(); card.querySelector('.work-play').style.display='none'; }
@@ -322,94 +339,128 @@ SOCIALS.forEach(function(s){
   sr.appendChild(a);
 });
 
-/* ---------- THREE.js hero : floating cosmos ---------- */
+/* ---------- THREE.js : fixed full-page 3D background ---------- */
+(function(){
 try{
-  var canvas = document.getElementById('hero-3d');
+  if(!window.THREE) return;
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var smallScreen = window.innerWidth < 700;
+  var canvas = document.getElementById('bg-3d');
+  if(!canvas) return;
   var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   var scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x0a0a10, 0.055);
-  var camera = new THREE.PerspectiveCamera(60, 1, .1, 100);
-  camera.position.set(0, 0, 14);
+  scene.fog = new THREE.FogExp2(0x0a0a10, 0.02);
+  var camera = new THREE.PerspectiveCamera(62, 1, .1, 240);
+  camera.position.set(0, 6, 16);
 
-  scene.add(new THREE.AmbientLight(0x8877aa, .7));
-  var key = new THREE.DirectionalLight(0xffffff, 1.1); key.position.set(6, 8, 6); scene.add(key);
-  var rim = new THREE.PointLight(0xe0237a, 2.2, 40); rim.position.set(-7, -3, 4); scene.add(rim);
-  var gold = new THREE.PointLight(0xf5b942, 1.4, 40); gold.position.set(7, 4, 2); scene.add(gold);
+  scene.add(new THREE.AmbientLight(0x8877aa, .75));
+  var key = new THREE.DirectionalLight(0xffffff, 1.0); key.position.set(6, 10, 8); scene.add(key);
+  var rim = new THREE.PointLight(0xe0237a, 2.4, 70); rim.position.set(-9, 2, 6); scene.add(rim);
+  var gold = new THREE.PointLight(0xf5b942, 1.5, 70); gold.position.set(9, -6, 4); scene.add(gold);
 
-  /* starfield */
-  var starGeo = new THREE.BufferGeometry(), sp = [];
-  for(var i=0;i<900;i++){ sp.push((Math.random()-.5)*60, (Math.random()-.5)*40, (Math.random()-.5)*40); }
+  /* starfield — tall volume behind the whole page */
+  var starGeo = new THREE.BufferGeometry(), sp = [], i, j, k;
+  var starCount = smallScreen ? 350 : 700;
+  for(i=0;i<starCount;i++){ sp.push((Math.random()-.5)*70, 30-Math.random()*115, (Math.random()-.5)*50 - 4); }
   starGeo.setAttribute('position', new THREE.Float32BufferAttribute(sp, 3));
-  scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({color:0xcfd6ff, size:.07, transparent:true, opacity:.85})));
+  scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({color:0xcfd6ff, size:.09, transparent:true, opacity:.8})));
 
   /* originkit-style particle drift: colored motes floating upward */
   var driftGeo = new THREE.BufferGeometry(), dp = [], dc = [];
   var palette = [[.88,.14,.48],[.96,.73,.26],[.48,.36,1],[.18,.88,.66]];
-  for(var k=0;k<260;k++){
-    dp.push((Math.random()-.5)*30, (Math.random()-.5)*18, (Math.random()-.5)*14);
+  var moteCount = smallScreen ? 120 : 220;
+  for(k=0;k<moteCount;k++){
+    dp.push((Math.random()-.5)*36, 26-Math.random()*105, (Math.random()-.5)*16);
     var c = palette[k % palette.length];
     dc.push(c[0], c[1], c[2]);
   }
   driftGeo.setAttribute('position', new THREE.Float32BufferAttribute(dp, 3));
   driftGeo.setAttribute('color', new THREE.Float32BufferAttribute(dc, 3));
-  var drift = new THREE.Points(driftGeo, new THREE.PointsMaterial({size:.14, vertexColors:true, transparent:true, opacity:.75}));
-  drift.userData.vel = [];
-  for(var k2=0;k2<260;k2++){ drift.userData.vel.push(.004 + Math.random()*.012); }
+  var drift = new THREE.Points(driftGeo, new THREE.PointsMaterial({size:.16, vertexColors:true, transparent:true, opacity:.7}));
   scene.add(drift);
 
-  /* floating shapes */
+  /* floating shapes — spread down the whole page, kept to the edges */
   var shapes = [], geos = [
-    new THREE.IcosahedronGeometry(1, 0), new THREE.TorusGeometry(.9, .32, 14, 28),
-    new THREE.OctahedronGeometry(1.1, 0), new THREE.TorusKnotGeometry(.7, .22, 90, 12)
+    new THREE.IcosahedronGeometry(1, 0), new THREE.TorusGeometry(.9, .32, 12, 24),
+    new THREE.OctahedronGeometry(1.1, 0), new THREE.TorusKnotGeometry(.7, .22, 80, 10)
   ];
   var mats = [
-    new THREE.MeshStandardMaterial({color:0xe0237a, roughness:.25, metalness:.75}),
-    new THREE.MeshStandardMaterial({color:0xf5b942, roughness:.3, metalness:.7}),
-    new THREE.MeshStandardMaterial({color:0x7a5cff, roughness:.25, metalness:.75}),
-    new THREE.MeshStandardMaterial({color:0x2de1a8, roughness:.3, metalness:.7})
+    new THREE.MeshStandardMaterial({color:0xe0237a, roughness:.3, metalness:.7}),
+    new THREE.MeshStandardMaterial({color:0xf5b942, roughness:.35, metalness:.65}),
+    new THREE.MeshStandardMaterial({color:0x7a5cff, roughness:.3, metalness:.7}),
+    new THREE.MeshStandardMaterial({color:0x2de1a8, roughness:.35, metalness:.65})
   ];
-  for(var j=0;j<16;j++){
+  var shapeCount = smallScreen ? 8 : 14;
+  for(j=0;j<shapeCount;j++){
     var m = new THREE.Mesh(geos[j % geos.length], mats[j % mats.length]);
-    m.position.set((Math.random()-.5)*22, (Math.random()-.5)*12, (Math.random()-.5)*10 - 2);
+    var side = (j % 2 === 0) ? -1 : 1;
+    m.position.set(side * (7.5 + Math.random()*6.5), 24 - Math.random()*100, (Math.random()-.5)*10 - 3);
+    if(j < 3){ m.position.set((Math.random()-.5)*13, 11 - Math.random()*7, -4 - Math.random()*4); }
     m.rotation.set(Math.random()*6, Math.random()*6, 0);
-    m.userData = {rx:(Math.random()-.5)*.012, ry:(Math.random()-.5)*.012, fy:Math.random()*6.28, amp:.4+Math.random()*.8, y0:m.position.y};
+    var s = .7 + Math.random()*.9; m.scale.set(s, s, s);
+    m.userData = {rx:(Math.random()-.5)*.01, ry:(Math.random()-.5)*.01, fy:Math.random()*6.28, amp:.4+Math.random()*.8, y0:m.position.y};
     scene.add(m); shapes.push(m);
   }
-  /* hero torus centerpiece */
-  var hero = new THREE.Mesh(new THREE.TorusKnotGeometry(1.5, .42, 140, 18),
+  /* hero torus-knot centerpiece */
+  var hero = new THREE.Mesh(new THREE.TorusKnotGeometry(1.6, .45, 120, 16),
     new THREE.MeshStandardMaterial({color:0xe0237a, roughness:.2, metalness:.85, emissive:0x4d0a26}));
-  hero.position.set(5.2, .4, -3); scene.add(hero);
+  hero.position.set(5.4, 5.4, -3); scene.add(hero);
 
-  var mx = 0, my = 0, t = 0;
-  window.addEventListener('pointermove', function(e){
-    mx = (e.clientX / window.innerWidth - .5); my = (e.clientY / window.innerHeight - .5);
-  });
-  function size(){ var w = canvas.clientWidth, h = canvas.clientHeight;
-    renderer.setSize(w, h, false); camera.aspect = w/h; camera.updateProjectionMatrix(); }
+  var mx = 0, my = 0, t = Math.random()*10;
+  if(window.matchMedia('(pointer:fine)').matches){
+    window.addEventListener('pointermove', function(e){
+      mx = (e.clientX / window.innerWidth - .5); my = (e.clientY / window.innerHeight - .5);
+    });
+  }
+  function size(){
+    var w = window.innerWidth, h = window.innerHeight;
+    renderer.setSize(w, h, false);
+    camera.aspect = w/h; camera.updateProjectionMatrix();
+  }
   window.addEventListener('resize', size); size();
 
-  (function tick(){
-    requestAnimationFrame(tick); t += .008;
-    shapes.forEach(function(m){
-      m.rotation.x += m.userData.rx; m.rotation.y += m.userData.ry;
-      m.position.y = m.userData.y0 + Math.sin(t*2 + m.userData.fy) * m.userData.amp;
-    });
+  function maxScroll(){ return Math.max(1, document.documentElement.scrollHeight - window.innerHeight); }
+  var lookY = 6, s2, pi;
+  function frame(){
+    t += .008;
+    for(s2=0;s2<shapes.length;s2++){
+      var mm = shapes[s2];
+      mm.rotation.x += mm.userData.rx; mm.rotation.y += mm.userData.ry;
+      mm.position.y = mm.userData.y0 + Math.sin(t*2 + mm.userData.fy) * mm.userData.amp;
+    }
     hero.rotation.x += .0035; hero.rotation.y += .005;
-    /* particle drift upward */
-    var pos = drift.geometry.attributes.position, vv = drift.userData.vel;
-    for(var pi=0; pi<pos.count; pi++){
-      var py = pos.getY(pi) + vv[pi];
-      if(py > 9) py = -9;
+    var pos = drift.geometry.attributes.position;
+    for(pi=0; pi<pos.count; pi++){
+      var py = pos.getY(pi) + .008;
+      if(py > 28) py = -80;
       pos.setY(pi, py);
     }
     pos.needsUpdate = true;
-    var sy = window.scrollY || 0;
-    camera.position.x += ((mx*2.2) - camera.position.x) * .04;
-    camera.position.y += ((-my*1.4 - sy*.004) - camera.position.y) * .04;
-    camera.lookAt(0, -sy*.002, 0);
+    /* camera glides down the page as you scroll */
+    var prog = Math.min(1, (window.scrollY || 0) / maxScroll());
+    var targetY = 6 - prog * 82;
+    lookY += (targetY - lookY) * .06;
+    camera.position.x += ((mx*2.4) - camera.position.x) * .04;
+    camera.position.y += ((lookY - my*1.2) - camera.position.y) * .06;
+    camera.lookAt(camera.position.x*.4, lookY - 2, 0);
     renderer.render(scene, camera);
-  })();
-}catch(err){ /* hero canvas optional — page works without WebGL */ }
+  }
+  if(reduceMotion){ frame(); }
+  else{ (function tick(){ requestAnimationFrame(tick); frame(); })(); }
+}catch(err){ /* background 3D optional — page works without WebGL */ }
+})();
+
+/* ---------- lazy alt intro videos (inside <details>) ---------- */
+(function(){
+  var det = document.querySelector('.intro-more');
+  if(!det) return;
+  det.addEventListener('toggle', function(){
+    if(!det.open) return;
+    det.querySelectorAll('video[data-src]').forEach(function(v){
+      v.src = v.getAttribute('data-src'); v.removeAttribute('data-src'); v.load();
+    });
+  });
+})();
 
 })();

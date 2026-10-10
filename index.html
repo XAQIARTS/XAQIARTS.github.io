@@ -14,6 +14,9 @@
 </head>
 <body>
 
+<!-- FIXED 3D BACKGROUND — full-page cosmos -->
+<canvas id="bg-3d" aria-hidden="true"></canvas>
+
 <!-- LOGO WELCOME -->
 <div id="loader" aria-hidden="true">
   <div class="loader-inner">
@@ -39,7 +42,6 @@
 
 <!-- HERO -->
 <header id="hero">
-  <canvas id="hero-3d"></canvas>
   <div class="hero-content">
     <p class="hero-kicker reveal">AI Generation Artist · Visual Storyteller</p>
     <h1 class="hero-title reveal">SAQIB<br>MAQBOOL KHAN</h1>
@@ -84,8 +86,8 @@
           <details class="intro-more">
             <summary>Watch the other two intros</summary>
             <div class="intro-alt">
-              <figure><video src="assets/intro/video-creator-final.mp4" muted loop playsinline preload="metadata" controls></video><figcaption>Creator look — charcoal studio</figcaption></figure>
-              <figure><video src="assets/intro/video3-blazer-final.mp4" muted loop playsinline preload="metadata" controls></video><figcaption>Blazer look — creative office</figcaption></figure>
+              <figure><video data-src="assets/intro/video-creator-final.mp4" muted loop playsinline preload="none" controls></video><figcaption>Creator look — charcoal studio</figcaption></figure>
+              <figure><video data-src="assets/intro/video3-blazer-final.mp4" muted loop playsinline preload="none" controls></video><figcaption>Blazer look — creative office</figcaption></figure>
             </div>
           </details>
         </div>
