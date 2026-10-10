@@ -312,6 +312,7 @@ var SOCIALS = [
   ['GitHub','https://github.com/XAQIARTS'],
   ['LinkedIn','https://www.linkedin.com/in/saqibmaqboolkhan'],
   ['YouTube','https://www.youtube.com/@xaqiarts'],
+  ['Funday Rhymes','https://www.youtube.com/@FundayRhymes-XAQIarts'],
   ['Instagram','https://www.instagram.com/xaqiarts_official']
 ];
 var sr = document.getElementById('social-row');
