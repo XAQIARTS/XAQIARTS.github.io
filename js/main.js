@@ -235,6 +235,9 @@ var PROJECTS = [
   }).catch(function(){ document.getElementById('extended').style.display='none'; });
 })();
 
+/* ---------- inlined image manifest (no fetch needed) ---------- */
+var IMG_MANIFEST = {"illustrations":["20150115_131525.jpg","20150115_131604.jpg","20150115_131654.jpg","20150115_131703.jpg","20150115_131713.jpg","20150115_131719.jpg","20150115_131732.jpg","20150115_131740.jpg","20150115_131937.jpg","20150115_131944.jpg","20150115_131950.jpg","20150115_131956.jpg","20150115_132002.jpg","20150115_132007.jpg","20150115_132015.jpg","20150115_132020.jpg","20180418_142405.jpg","20180418_142525.jpg","20180418_142747.jpg","20180418_142757.jpg"],"oil-paintings":["20150115_131630.jpg","20150115_131645.jpg","20150115_131810.jpg","20150115_131818.jpg","20150115_131842.jpg","20150115_131848.jpg","20150115_131858.jpg","20150115_131907.jpg","20180418_142317.jpg","20180418_142359.jpg","20180418_142450.jpg","20180418_142736.jpg","20180422_123522.jpg","20180422_123530.jpg","20180422_123540.jpg","IMG-20210616-WA0000.jpg"],"murals":["20170805_154601.jpg","20170813_130427.jpg","20170813_130459.jpg","20170813_130633.jpg","20180418_142632.jpg","20180418_142649.jpg","20190413_211052.jpg","20190413_211102.jpg","20200306_115535-01.jpg","20200314_120019.jpg","20200314_120025.jpg","IMG-20180327-WA0025.jpg","IMG-20180327-WA0029.jpg","IMG-20180327-WA0033.jpg"],"sketches":["00003269.jpg","20150115_131335.jpg","20150115_131359.jpg","20150115_131433.jpg","20150115_131443.jpg","20170729_220441.jpg","20180418_142519.jpg","20181015_210142.jpg","20181015_210159.jpg","20211216_231919.jpg","20211216_231939.jpg","20211216_231949-01.jpg","20230327_012942-01.jpg","20230329_011750-01.jpg","20230405_061859-01.jpg","20230410_072659-0.jpg","20230418_085528-01.jpg","20230421_024945-01.jpg","20240201_172332.jpg","FB_IMG_1519874612149.jpg","IMG-20250531-WA0003.jpg","IMG_20230415_16053.jpg","mandala 1 2023.jpg"],"characters":["039-arivan-the-last-sentinel.jpg","076-luna-rae.jpg","077-kael.jpg","078-milo.jpg","084-niko.jpg","086-aya.jpg","087-cosmo.jpg","088-elara.jpg","089-orion.jpg","090-nova.jpg","091-lyra.jpg","092-zayn.jpg","093-gora.jpg","095-luma.jpg","096-roko.jpg","098-armand.jpg","099-eloise.jpg","100-lucien.jpg","101-bill.jpg","102-o-ren-ishii.jpg","103-the-bride.jpg"],"photos":["photo-106.jpg","photo-137.jpg","photo-144.jpg","photo-156.jpg","photo-162.jpg","photo-29.jpg","photo-30.jpg","photo-31.jpg","photo-34.jpg","photo-84.jpg","photo-85.jpg","photo-86.jpg"]};
+
 /* ---------- 3D album ring gallery ---------- */
 var ring = document.getElementById('album-ring');
 var caption = document.getElementById('album-caption');
@@ -244,27 +247,18 @@ function prettyName(f){
 }
 function buildAlbum(name){
   curAlbum = name; angle = 0; items = []; ring.innerHTML = '';
-  fetch('assets/img/manifest.json').then(function(r){
-    if(!r.ok) throw new Error('manifest HTTP '+r.status);
-    return r.json();
-  }).then(function(m){
-    var files = m[name] || [];
-    var step = 360 / files.length;
-    files.forEach(function(f, i){
-      var d = document.createElement('div');
-      d.className = 'album-item';
-      d.style.transform = 'rotateY('+(i*step)+'deg) translateZ('+radius+'px)';
-      var img = document.createElement('img');
-      img.src = 'assets/img/'+name+'/'+f; img.alt = prettyName(f); img.loading = 'lazy';
-      d.appendChild(img); ring.appendChild(d); items.push(d);
-      d.addEventListener('click', function(){ openLightbox('assets/img/'+name+'/'+f, prettyName(f)); });
-    });
-    updateRing(); focusItem(0);
-  }).catch(function(){
-    /* retry once after 2s (transient network/CDN hiccup) */
-    if(!buildAlbum._retried){ buildAlbum._retried = true; setTimeout(function(){ buildAlbum(name); }, 2000); }
-    else { buildAlbum._retried = false; }
+  var files = (typeof IMG_MANIFEST !== 'undefined' && IMG_MANIFEST[name]) || [];
+  var step = 360 / Math.max(1, files.length);
+  files.forEach(function(f, i){
+    var d = document.createElement('div');
+    d.className = 'album-item';
+    d.style.transform = 'rotateY('+(i*step)+'deg) translateZ('+radius+'px)';
+    var img = document.createElement('img');
+    img.src = 'assets/img/'+name+'/'+f; img.alt = prettyName(f); img.loading = 'lazy';
+    d.appendChild(img); ring.appendChild(d); items.push(d);
+    d.addEventListener('click', function(){ openLightbox('assets/img/'+name+'/'+f, prettyName(f)); });
   });
+  updateRing(); focusItem(0);
 }
 /* lightbox */
 var lb = document.getElementById('lightbox');
@@ -281,7 +275,7 @@ document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeL
 var fg = document.getElementById('fullgal');
 function openFullgal(){
   var grid = document.getElementById('fg-grid'); grid.innerHTML = '';
-  fetch('assets/img/manifest.json').then(function(r){ return r.json(); }).then(function(m){
+  function render(m){
     Object.keys(m).forEach(function(album){
       m[album].forEach(function(f){
         var src = 'assets/img/'+album+'/'+f;
@@ -291,7 +285,9 @@ function openFullgal(){
       });
     });
     fg.classList.add('open'); document.body.style.overflow = 'hidden';
-  });
+  }
+  if(typeof IMG_MANIFEST !== 'undefined'){ render(IMG_MANIFEST); }
+  else { fetch('assets/img/manifest.json').then(function(r){ return r.json(); }).then(render); }
 }
 function closeFullgal(){ fg.classList.remove('open'); document.body.style.overflow = ''; }
 document.getElementById('open-fullgal').addEventListener('click', openFullgal);
@@ -540,115 +536,82 @@ function bgFallback2D(canvas){
   })();
 }
 
-/* ---------- THREE.js : fixed full-page 3D background ---------- */
+/* ---------- THREE.js : fixed full-page cosmos (v1 proven scene) ---------- */
 (function(){
 var canvas = document.getElementById('bg-3d');
 if(!canvas) return;
 try{
   if(!window.THREE) throw new Error('no THREE');
-  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var smallScreen = window.innerWidth < 700;
   var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   var scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x0a0a10, 0.02);
-  var camera = new THREE.PerspectiveCamera(62, 1, .1, 240);
-  camera.position.set(0, 6, 16);
+  scene.fog = new THREE.FogExp2(0x0a0a10, 0.045);
+  var camera = new THREE.PerspectiveCamera(60, 1, .1, 120);
+  camera.position.set(0, 0, 14);
 
-  scene.add(new THREE.AmbientLight(0x8877aa, .75));
-  var key = new THREE.DirectionalLight(0xffffff, 1.0); key.position.set(6, 10, 8); scene.add(key);
-  var rim = new THREE.PointLight(0xe0237a, 2.4, 70); rim.position.set(-9, 2, 6); scene.add(rim);
-  var gold = new THREE.PointLight(0xf5b942, 1.5, 70); gold.position.set(9, -6, 4); scene.add(gold);
+  scene.add(new THREE.AmbientLight(0x8877aa, .7));
+  var key = new THREE.DirectionalLight(0xffffff, 1.1); key.position.set(6, 8, 6); scene.add(key);
+  var rim = new THREE.PointLight(0xe0237a, 2.2, 50); rim.position.set(-7, -3, 4); scene.add(rim);
+  var gold = new THREE.PointLight(0xf5b942, 1.4, 50); gold.position.set(7, 4, 2); scene.add(gold);
 
-  /* starfield — tall volume behind the whole page */
-  var starGeo = new THREE.BufferGeometry(), sp = [], i, j, k;
-  var starCount = smallScreen ? 350 : 700;
-  for(i=0;i<starCount;i++){ sp.push((Math.random()-.5)*70, 30-Math.random()*115, (Math.random()-.5)*50 - 4); }
+  /* starfield — tall volume for the whole page */
+  var starGeo = new THREE.BufferGeometry(), sp = [], si;
+  for(si=0;si<900;si++){ sp.push((Math.random()-.5)*60, 24-Math.random()*95, (Math.random()-.5)*40); }
   starGeo.setAttribute('position', new THREE.Float32BufferAttribute(sp, 3));
-  scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({color:0xcfd6ff, size:.09, transparent:true, opacity:.8})));
+  scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({color:0xcfd6ff, size:.07, transparent:true, opacity:.85})));
 
-  /* originkit-style particle drift: colored motes floating upward */
-  var driftGeo = new THREE.BufferGeometry(), dp = [], dc = [];
-  var palette = [[.88,.14,.48],[.96,.73,.26],[.48,.36,1],[.18,.88,.66]];
-  var moteCount = smallScreen ? 120 : 220;
-  for(k=0;k<moteCount;k++){
-    dp.push((Math.random()-.5)*36, 26-Math.random()*105, (Math.random()-.5)*16);
-    var c = palette[k % palette.length];
-    dc.push(c[0], c[1], c[2]);
-  }
-  driftGeo.setAttribute('position', new THREE.Float32BufferAttribute(dp, 3));
-  driftGeo.setAttribute('color', new THREE.Float32BufferAttribute(dc, 3));
-  var drift = new THREE.Points(driftGeo, new THREE.PointsMaterial({size:.16, vertexColors:true, transparent:true, opacity:.7}));
-  scene.add(drift);
-
-  /* floating shapes — spread down the whole page, kept to the edges */
+  /* floating shapes — v1 style, spread down the page */
   var shapes = [], geos = [
-    new THREE.IcosahedronGeometry(1, 0), new THREE.TorusGeometry(.9, .32, 12, 24),
-    new THREE.OctahedronGeometry(1.1, 0), new THREE.TorusKnotGeometry(.7, .22, 80, 10)
+    new THREE.IcosahedronGeometry(1, 0), new THREE.TorusGeometry(.9, .32, 14, 28),
+    new THREE.OctahedronGeometry(1.1, 0), new THREE.TorusKnotGeometry(.7, .22, 90, 12)
   ];
   var mats = [
-    new THREE.MeshStandardMaterial({color:0xe0237a, roughness:.3, metalness:.7}),
-    new THREE.MeshStandardMaterial({color:0xf5b942, roughness:.35, metalness:.65}),
-    new THREE.MeshStandardMaterial({color:0x7a5cff, roughness:.3, metalness:.7}),
-    new THREE.MeshStandardMaterial({color:0x2de1a8, roughness:.35, metalness:.65})
+    new THREE.MeshStandardMaterial({color:0xe0237a, roughness:.25, metalness:.75}),
+    new THREE.MeshStandardMaterial({color:0xf5b942, roughness:.3, metalness:.7}),
+    new THREE.MeshStandardMaterial({color:0x7a5cff, roughness:.25, metalness:.75}),
+    new THREE.MeshStandardMaterial({color:0x2de1a8, roughness:.3, metalness:.7})
   ];
-  var shapeCount = smallScreen ? 8 : 14;
-  for(j=0;j<shapeCount;j++){
-    var m = new THREE.Mesh(geos[j % geos.length], mats[j % mats.length]);
-    var side = (j % 2 === 0) ? -1 : 1;
-    m.position.set(side * (7.5 + Math.random()*6.5), 24 - Math.random()*100, (Math.random()-.5)*10 - 3);
-    if(j < 3){ m.position.set((Math.random()-.5)*13, 11 - Math.random()*7, -4 - Math.random()*4); }
+  var sj;
+  for(sj=0;sj<18;sj++){
+    var m = new THREE.Mesh(geos[sj % geos.length], mats[sj % mats.length]);
+    var side = (sj % 2 === 0) ? -1 : 1;
+    m.position.set(side*(6.5+Math.random()*5.5), 20-Math.random()*88, (Math.random()-.5)*10 - 2);
+    if(sj < 4){ m.position.set((Math.random()-.5)*20, 8-Math.random()*10, (Math.random()-.5)*10 - 2); }
     m.rotation.set(Math.random()*6, Math.random()*6, 0);
-    var s = .7 + Math.random()*.9; m.scale.set(s, s, s);
-    m.userData = {rx:(Math.random()-.5)*.01, ry:(Math.random()-.5)*.01, fy:Math.random()*6.28, amp:.4+Math.random()*.8, y0:m.position.y};
+    m.userData = {rx:(Math.random()-.5)*.012, ry:(Math.random()-.5)*.012, fy:Math.random()*6.28, amp:.4+Math.random()*.8, y0:m.position.y};
     scene.add(m); shapes.push(m);
   }
-  /* hero torus-knot centerpiece */
-  var hero = new THREE.Mesh(new THREE.TorusKnotGeometry(1.6, .45, 120, 16),
+  /* hero torus centerpiece */
+  var hero = new THREE.Mesh(new THREE.TorusKnotGeometry(1.5, .42, 140, 18),
     new THREE.MeshStandardMaterial({color:0xe0237a, roughness:.2, metalness:.85, emissive:0x4d0a26}));
-  hero.position.set(5.4, 5.4, -3); scene.add(hero);
+  hero.position.set(5.2, 5.5, -3); scene.add(hero);
 
-  var mx = 0, my = 0, t = Math.random()*10;
+  var mx = 0, my = 0, t = 0;
   if(window.matchMedia('(pointer:fine)').matches){
     window.addEventListener('pointermove', function(e){
       mx = (e.clientX / window.innerWidth - .5); my = (e.clientY / window.innerHeight - .5);
     });
   }
-  function size(){
-    var w = window.innerWidth, h = window.innerHeight;
-    renderer.setSize(w, h, false);
-    camera.aspect = w/h; camera.updateProjectionMatrix();
-  }
+  function size(){ var w = window.innerWidth, h = window.innerHeight;
+    renderer.setSize(w, h, false); camera.aspect = w/h; camera.updateProjectionMatrix(); }
   window.addEventListener('resize', size); size();
 
   function maxScroll(){ return Math.max(1, document.documentElement.scrollHeight - window.innerHeight); }
-  var lookY = 6, s2, pi;
-  function frame(){
-    t += .008;
-    for(s2=0;s2<shapes.length;s2++){
-      var mm = shapes[s2];
+  (function tick(){
+    requestAnimationFrame(tick); t += .008;
+    shapes.forEach(function(mm){
       mm.rotation.x += mm.userData.rx; mm.rotation.y += mm.userData.ry;
       mm.position.y = mm.userData.y0 + Math.sin(t*2 + mm.userData.fy) * mm.userData.amp;
-    }
+    });
     hero.rotation.x += .0035; hero.rotation.y += .005;
-    var pos = drift.geometry.attributes.position;
-    for(pi=0; pi<pos.count; pi++){
-      var py = pos.getY(pi) + .008;
-      if(py > 28) py = -80;
-      pos.setY(pi, py);
-    }
-    pos.needsUpdate = true;
-    /* camera glides down the page as you scroll */
-    var prog = Math.min(1, (window.scrollY || 0) / maxScroll());
-    var targetY = 6 - prog * 82;
-    lookY += (targetY - lookY) * .06;
-    camera.position.x += ((mx*2.4) - camera.position.x) * .04;
-    camera.position.y += ((lookY - my*1.2) - camera.position.y) * .06;
-    camera.lookAt(camera.position.x*.4, lookY - 2, 0);
+    var sy = window.scrollY || 0;
+    var prog = Math.min(1, sy / maxScroll());
+    var targetY = -prog * 62;
+    camera.position.x += ((mx*2.2) - camera.position.x) * .04;
+    camera.position.y += ((targetY - my*1.4) - camera.position.y) * .05;
+    camera.lookAt(camera.position.x*.3, targetY - 1, 0);
     renderer.render(scene, camera);
-  }
-  if(reduceMotion){ frame(); }
-  else{ (function tick(){ requestAnimationFrame(tick); frame(); })(); }
+  })();
 }catch(err){ bgFallback2D(canvas); }
 })();
 

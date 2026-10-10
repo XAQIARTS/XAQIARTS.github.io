@@ -369,3 +369,36 @@ nav{
 .map-frame::after{content:"";position:absolute;inset:0;border-radius:24px;pointer-events:none;z-index:2;
   background:radial-gradient(ellipse 120% 60% at 50% -10%,rgba(255,255,255,.28),transparent 55%)}
 .map-frame iframe{position:relative;z-index:1}
+
+/* ============ RYVEN-STYLE COMPACT LAYOUT ============ */
+.section{padding:72px 0}
+.sec-lead{margin-bottom:28px}
+/* numbered sections — Ryven editorial style */
+body{counter-reset:ryven-sec}
+.sec-kicker{counter-increment:ryven-sec}
+.sec-kicker::before{content:"0" counter(ryven-sec);display:block;font-family:var(--font-b);font-weight:700;
+  font-size:13px;letter-spacing:.3em;color:var(--accent);margin-bottom:8px}
+/* denser work grids — smaller cards, custom thumbnails first */
+.work-grid{grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:18px}
+.work-body{padding:14px 16px}
+.work-body b{font-size:15px}
+.work-body p{font-size:13px}
+.work-tag{font-size:10px;margin-top:8px}
+/* tighter project bento */
+#projects-grid{gap:14px}
+#projects-grid .proj-card{min-height:160px}
+/* compact collab + achievements */
+.collab-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.collab-card{padding:18px 14px}
+.achieve-card img{height:220px}
+/* tighter hero */
+.hero-content{padding:100px 24px 40px}
+.hero-sub{margin:18px 0 26px;font-size:17px}
+/* Ryven-style stat band */
+.stats{margin-top:26px;gap:28px}
+.stat b{font-size:36px}
+/* section dividers — thin Ryven-like rules */
+.section{border-top:1px solid var(--line)}
+#hero{border-top:none}
+.marquee{border-top:none}
+@media(max-width:860px){.section{padding:56px 0}}
