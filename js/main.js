@@ -247,7 +247,6 @@ var PROJECTS = [
 var IMG_MANIFEST = {"illustrations":["20150115_131525.jpg","20150115_131604.jpg","20150115_131654.jpg","20150115_131703.jpg","20150115_131713.jpg","20150115_131719.jpg","20150115_131732.jpg","20150115_131740.jpg","20150115_131937.jpg","20150115_131944.jpg","20150115_131950.jpg","20150115_131956.jpg","20150115_132002.jpg","20150115_132007.jpg","20150115_132015.jpg","20150115_132020.jpg","20180418_142405.jpg","20180418_142525.jpg","20180418_142747.jpg","20180418_142757.jpg"],"oil-paintings":["20150115_131630.jpg","20150115_131645.jpg","20150115_131810.jpg","20150115_131818.jpg","20150115_131842.jpg","20150115_131848.jpg","20150115_131858.jpg","20150115_131907.jpg","20180418_142317.jpg","20180418_142359.jpg","20180418_142450.jpg","20180418_142736.jpg","20180422_123522.jpg","20180422_123530.jpg","20180422_123540.jpg","IMG-20210616-WA0000.jpg"],"murals":["20170805_154601.jpg","20170813_130427.jpg","20170813_130459.jpg","20170813_130633.jpg","20180418_142632.jpg","20180418_142649.jpg","20190413_211052.jpg","20190413_211102.jpg","20200306_115535-01.jpg","20200314_120019.jpg","20200314_120025.jpg","IMG-20180327-WA0025.jpg","IMG-20180327-WA0029.jpg","IMG-20180327-WA0033.jpg"],"sketches":["00003269.jpg","20150115_131335.jpg","20150115_131359.jpg","20150115_131433.jpg","20150115_131443.jpg","20170729_220441.jpg","20180418_142519.jpg","20181015_210142.jpg","20181015_210159.jpg","20211216_231919.jpg","20211216_231939.jpg","20211216_231949-01.jpg","20230327_012942-01.jpg","20230329_011750-01.jpg","20230405_061859-01.jpg","20230410_072659-0.jpg","20230418_085528-01.jpg","20230421_024945-01.jpg","20240201_172332.jpg","FB_IMG_1519874612149.jpg","IMG-20250531-WA0003.jpg","IMG_20230415_16053.jpg","mandala 1 2023.jpg"],"characters":["039-arivan-the-last-sentinel.jpg","076-luna-rae.jpg","077-kael.jpg","078-milo.jpg","084-niko.jpg","086-aya.jpg","087-cosmo.jpg","088-elara.jpg","089-orion.jpg","090-nova.jpg","091-lyra.jpg","092-zayn.jpg","093-gora.jpg","095-luma.jpg","096-roko.jpg","098-armand.jpg","099-eloise.jpg","100-lucien.jpg","101-bill.jpg","102-o-ren-ishii.jpg","103-the-bride.jpg"],"photos":["photo-106.jpg","photo-137.jpg","photo-144.jpg","photo-156.jpg","photo-162.jpg","photo-29.jpg","photo-30.jpg","photo-31.jpg","photo-34.jpg","photo-84.jpg","photo-85.jpg","photo-86.jpg"]};
 
 /* ---------- 3D album ring gallery ---------- */
-try{
 var ring = document.getElementById('album-ring');
 var caption = document.getElementById('album-caption');
 var items = [], angle = 0, curAlbum = 'sketches', radius = 460;
@@ -440,8 +439,6 @@ SOCIALS.forEach(function(s){
   a.className = 'soc'; a.href = s[1]; a.target = '_blank'; a.rel = 'noopener'; a.textContent = s[0];
   sr.appendChild(a);
 });
-
-}catch(galErr){ if(window.console) console.warn('gallery section failed:', galErr); }
 
 /* ---------- PARTICLE DRIFT — originkit-style network in hero ---------- */
 (function(){
