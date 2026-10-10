@@ -16,6 +16,9 @@
 
 <!-- FIXED 3D BACKGROUND — full-page cosmos -->
 <canvas id="bg-3d" aria-hidden="true"></canvas>
+<div class="float-orb fo1" aria-hidden="true"></div>
+<div class="float-orb fo2" aria-hidden="true"></div>
+<div class="float-orb fo3" aria-hidden="true"></div>
 
 <!-- LOGO WELCOME -->
 <div id="loader" aria-hidden="true">
@@ -42,6 +45,7 @@
 
 <!-- HERO -->
 <header id="hero">
+  <canvas id="drift" aria-hidden="true"></canvas>
   <div class="hero-content">
     <p class="hero-kicker reveal">AI Generation Artist · Visual Storyteller</p>
     <h1 class="hero-title reveal">SAQIB<br>MAQBOOL KHAN</h1>
@@ -99,6 +103,7 @@
       </div>
       <div class="about-3d reveal">
         <div class="orb" aria-hidden="true"></div>
+        <div class="img-orbit" id="img-orbit"></div>
       </div>
     </div>
   </div>
@@ -173,14 +178,12 @@
     <h2 class="sec-title reveal">Hand-made <em>worlds</em></h2>
     <p class="sec-lead reveal">Sketches &amp; oil paintings, floating in 3D space. Drag to spin the album.</p>
     <div class="reveal" style="text-align:center;margin-bottom:22px"><button class="btn" id="open-fullgal">View Complete Gallery</button></div>
-    <div class="gallery-tabs reveal">
-      <button class="g-tab active" data-album="sketches">Sketches</button>
-      <button class="g-tab" data-album="oil-paintings">Oil Paintings</button>
-      <button class="g-tab" data-album="illustrations">Illustrations</button>
-      <button class="g-tab" data-album="characters">Pixar 3D Styled Character Storyboard</button>
-      <button class="g-tab" data-album="photos">Photos</button>
-      <button class="g-tab" data-album="murals">Murals</button>
+    <div class="helix-stage reveal" id="helix-stage">
+      <div class="helix" id="helix"><!-- album bars injected by JS --></div>
+      <button class="helix-arrow" id="helix-prev" aria-label="Previous album">‹</button>
+      <button class="helix-arrow" id="helix-next" aria-label="Next album">›</button>
     </div>
+    <div class="helix-label" id="helix-label">Sketches</div>
     <div class="album-stage reveal">
       <div class="album-ring" id="album-ring"><!-- items injected by JS --></div>
       <div class="album-controls">

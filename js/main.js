@@ -307,12 +307,76 @@ function focusItem(i){
 function stepAlbum(dir){ focusItem((+ring.dataset.idx || 0) + dir); }
 document.getElementById('album-prev').addEventListener('click', function(){ stepAlbum(-1); });
 document.getElementById('album-next').addEventListener('click', function(){ stepAlbum(1); });
-document.querySelectorAll('.g-tab').forEach(function(t){
-  t.addEventListener('click', function(){
-    document.querySelectorAll('.g-tab').forEach(function(x){ x.classList.remove('active'); });
-    t.classList.add('active'); buildAlbum(t.dataset.album);
+/* ---------- XYLOPHONE HELIX — album selector ---------- */
+var ALBUMS = [
+  {id:'sketches',      short:'Sketches', label:'Sketches'},
+  {id:'oil-paintings', short:'Oils',     label:'Oil Paintings'},
+  {id:'illustrations', short:'Illust',   label:'Illustrations'},
+  {id:'characters',    short:'Chars',    label:'Pixar 3D Styled Character Storyboard'},
+  {id:'photos',        short:'Photos',   label:'Photos'},
+  {id:'murals',        short:'Murals',   label:'Murals'}
+];
+(function(){
+  var stage = document.getElementById('helix-stage');
+  var helix = document.getElementById('helix');
+  var label = document.getElementById('helix-label');
+  if(!stage || !helix) return;
+  var n = ALBUMS.length, step = 360/n;
+  var R = Math.min(300, window.innerWidth*.34);
+  var bars = [], rot = 0, targetRot = 0, cur = 0, idle = true, idleTimer = null;
+  ALBUMS.forEach(function(a, i){
+    var b = document.createElement('div');
+    b.className = 'h-bar' + (i===0 ? ' active' : '');
+    var ang = i*step;
+    var y = Math.sin(ang*Math.PI/180) * 46; /* helix twist */
+    b.style.transform = 'rotateY('+ang+'deg) translateZ('+R+'px) translateY('+y.toFixed(1)+'px)';
+    b.innerHTML = '<span>'+a.short+'</span>';
+    b.addEventListener('click', function(ev){ ev.stopPropagation(); select(i); });
+    helix.appendChild(b); bars.push(b);
   });
-});
+  function pokeIdle(){
+    idle = false;
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(function(){ idle = true; }, 6000);
+  }
+  function select(i){
+    cur = ((i % n) + n) % n;
+    var want = -cur*step;
+    targetRot = want + Math.round((rot - want)/360)*360; /* nearest equivalent angle */
+    bars.forEach(function(b, bi){ b.classList.toggle('active', bi===cur); });
+    label.textContent = ALBUMS[cur].label;
+    buildAlbum(ALBUMS[cur].id);
+    pokeIdle();
+  }
+  document.getElementById('helix-prev').addEventListener('click', function(){ select(cur-1); });
+  document.getElementById('helix-next').addEventListener('click', function(){ select(cur+1); });
+  /* drag / swipe to spin */
+  var sx = 0, dragging = false, moved = 0;
+  stage.addEventListener('pointerdown', function(e){
+    dragging = true; sx = e.clientX; moved = 0; pokeIdle();
+    try{ stage.setPointerCapture(e.pointerId); }catch(err){}
+  });
+  stage.addEventListener('pointermove', function(e){
+    if(!dragging) return;
+    var dx = e.clientX - sx; sx = e.clientX; moved += Math.abs(dx);
+    rot += dx*.45; targetRot = rot;
+  });
+  stage.addEventListener('pointerup', function(){
+    if(!dragging) return;
+    dragging = false;
+    if(moved > 10){ select(Math.round(-rot/step)); } /* snap to nearest bar */
+    else pokeIdle();
+  });
+  (function spin(){
+    requestAnimationFrame(spin);
+    if(!dragging){
+      if(idle) targetRot += .12;
+      rot += (targetRot - rot) * .07;
+    }
+    helix.style.transform = 'translateZ(-'+R+'px) rotateY('+rot+'deg)';
+  })();
+  window.addEventListener('resize', function(){ R = Math.min(300, window.innerWidth*.34); });
+})();
 /* drag to spin */
 (function(){
   var stage = document.querySelector('.album-stage'), sx = 0, dragging = false;
@@ -321,6 +385,32 @@ document.querySelectorAll('.g-tab').forEach(function(t){
   stage.addEventListener('pointerup', function(){ dragging = false; });
 })();
 buildAlbum('sketches');
+
+/* ---------- IMAGE GROUP CIRCLE — orbiting portraits in About ---------- */
+(function(){
+  var orbit = document.getElementById('img-orbit');
+  if(!orbit) return;
+  var pics = [
+    'assets/img/photos/portrait.jpg',
+    'assets/img/photos/photo-29.jpg',
+    'assets/img/characters/039-arivan-the-last-sentinel.jpg',
+    'assets/img/photos/photo-84.jpg',
+    'assets/img/characters/076-luna-rae.jpg',
+    'assets/img/photos/photo-137.jpg',
+    'assets/img/characters/077-kael.jpg',
+    'assets/img/photos/photo-156.jpg'
+  ];
+  var R = window.innerWidth < 500 ? 128 : 168;
+  pics.forEach(function(src, i){
+    var a = (i/pics.length)*Math.PI*2 - Math.PI/2;
+    var img = document.createElement('img');
+    img.src = src; img.loading = 'lazy'; img.alt = 'XAQI arts — selected work';
+    img.style.left = 'calc(50% + '+(Math.cos(a)*R).toFixed(1)+'px - 38px)';
+    img.style.top = 'calc(50% + '+(Math.sin(a)*R).toFixed(1)+'px - 38px)';
+    img.addEventListener('click', function(){ openLightbox(src, img.alt); });
+    orbit.appendChild(img);
+  });
+})();
 
 /* ---------- socials ---------- */
 var SOCIALS = [
@@ -338,6 +428,70 @@ SOCIALS.forEach(function(s){
   a.className = 'soc'; a.href = s[1]; a.target = '_blank'; a.rel = 'noopener'; a.textContent = s[0];
   sr.appendChild(a);
 });
+
+/* ---------- PARTICLE DRIFT — originkit-style network in hero ---------- */
+(function(){
+  var cv = document.getElementById('drift');
+  if(!cv) return;
+  var ctx = cv.getContext('2d');
+  var W = 0, H = 0, pts = [];
+  var mouse = {x:-9999, y:-9999};
+  var N = window.innerWidth < 700 ? 55 : 95;
+  var COLORS = ['224,35,122','245,185,66','122,92,255','45,225,168'];
+  var LINK = 130;
+  function resize(){
+    var r = cv.parentElement.getBoundingClientRect();
+    W = cv.width = Math.max(1, r.width); H = cv.height = Math.max(1, r.height);
+  }
+  window.addEventListener('resize', resize); resize();
+  var i;
+  for(i=0;i<N;i++){
+    pts.push({x:Math.random()*W, y:Math.random()*H,
+      vx:(Math.random()-.5)*.45, vy:(Math.random()-.5)*.45,
+      r:1+Math.random()*2.2, c:COLORS[i%COLORS.length], glow:Math.random()<.16});
+  }
+  cv.parentElement.addEventListener('pointermove', function(e){
+    var r = cv.getBoundingClientRect();
+    mouse.x = e.clientX - r.left; mouse.y = e.clientY - r.top;
+  });
+  cv.parentElement.addEventListener('pointerleave', function(){ mouse.x = -9999; mouse.y = -9999; });
+  (function tick(){
+    requestAnimationFrame(tick);
+    ctx.clearRect(0,0,W,H);
+    var j, k;
+    for(j=0;j<pts.length;j++){
+      var p = pts[j];
+      p.x += p.vx; p.y += p.vy;
+      if(p.x<0||p.x>W) p.vx *= -1;
+      if(p.y<0||p.y>H) p.vy *= -1;
+      var mdx = p.x-mouse.x, mdy = p.y-mouse.y, md = Math.sqrt(mdx*mdx+mdy*mdy);
+      if(md<140 && md>1){ p.x += mdx/md*.6; p.y += mdy/md*.6; }
+    }
+    ctx.lineWidth = 1;
+    for(j=0;j<pts.length;j++){
+      for(k=j+1;k<pts.length;k++){
+        var a = pts[j], b = pts[k];
+        var dx = a.x-b.x, dy = a.y-b.y, d = Math.sqrt(dx*dx+dy*dy);
+        if(d<LINK){
+          ctx.strokeStyle = 'rgba(165,155,195,'+((1-d/LINK)*.32).toFixed(3)+')';
+          ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+        }
+      }
+    }
+    for(j=0;j<pts.length;j++){
+      var q = pts[j];
+      if(q.glow){
+        var g = ctx.createRadialGradient(q.x,q.y,0,q.x,q.y,q.r*5);
+        g.addColorStop(0,'rgba('+q.c+',.9)');
+        g.addColorStop(1,'rgba('+q.c+',0)');
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(q.x,q.y,q.r*5,0,6.2832); ctx.fill();
+      }
+      ctx.fillStyle = 'rgba('+q.c+',.85)';
+      ctx.beginPath(); ctx.arc(q.x,q.y,q.r,0,6.2832); ctx.fill();
+    }
+  })();
+})();
 
 /* ---------- THREE.js : fixed full-page 3D background ---------- */
 (function(){

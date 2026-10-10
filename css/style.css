@@ -307,3 +307,65 @@ nav{
 .map-link:hover{text-decoration:underline}
 .contact-phone a{color:var(--ink);text-decoration:none}
 .contact-phone a:hover{color:var(--accent)}
+
+/* ============ PARTICLE DRIFT — hero first impression ============ */
+#drift{position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;opacity:.9}
+
+/* ============ AMBIENT FLOATING ORBS ============ */
+.float-orb{position:fixed;border-radius:50%;filter:blur(70px);z-index:0;pointer-events:none;opacity:.5}
+.fo1{width:420px;height:420px;left:-140px;top:22%;background:radial-gradient(circle,rgba(224,35,122,.35),transparent 70%);animation:foDrift1 22s ease-in-out infinite alternate}
+.fo2{width:360px;height:360px;right:-120px;top:55%;background:radial-gradient(circle,rgba(122,92,255,.3),transparent 70%);animation:foDrift2 26s ease-in-out infinite alternate}
+.fo3{width:300px;height:300px;left:30%;bottom:-100px;background:radial-gradient(circle,rgba(245,185,66,.25),transparent 70%);animation:foDrift3 30s ease-in-out infinite alternate}
+@keyframes foDrift1{to{transform:translate(120px,80px) scale(1.15)}}
+@keyframes foDrift2{to{transform:translate(-100px,-70px) scale(1.1)}}
+@keyframes foDrift3{to{transform:translate(80px,-90px) scale(1.2)}}
+[data-theme="light"] .float-orb{opacity:.32}
+
+/* ============ XYLOPHONE HELIX — album selector ============ */
+.helix-stage{position:relative;height:330px;perspective:1200px;overflow:hidden;margin-bottom:6px;touch-action:pan-y;cursor:grab}
+.helix-stage:active{cursor:grabbing}
+.helix{position:absolute;left:50%;top:50%;width:0;height:0;transform-style:preserve-3d;will-change:transform}
+.h-bar{position:absolute;left:-30px;top:-115px;width:60px;height:230px;border-radius:30px;cursor:pointer;
+  background:linear-gradient(180deg,#3d3d4d 0%,#1a1a24 60%,#101016 100%);
+  border:1px solid rgba(255,255,255,.16);
+  box-shadow:0 18px 44px rgba(0,0,0,.5),inset 0 2px 6px rgba(255,255,255,.25),inset 0 -8px 14px rgba(0,0,0,.5);
+  display:flex;align-items:center;justify-content:center;
+  transition:box-shadow .4s,filter .4s}
+.h-bar:hover{filter:brightness(1.35)}
+.h-bar span{writing-mode:vertical-rl;font-size:11px;letter-spacing:.3em;text-transform:uppercase;color:#cfc8dc;font-weight:700;pointer-events:none}
+.h-bar.active{background:linear-gradient(180deg,#ff5e3a 0%,var(--accent) 55%,#8f0f46 100%);
+  box-shadow:0 0 46px rgba(224,35,122,.7),0 18px 44px rgba(0,0,0,.5),inset 0 2px 8px rgba(255,255,255,.5)}
+.h-bar.active span{color:#fff}
+.helix-arrow{position:absolute;top:50%;transform:translateY(-50%);width:52px;height:52px;border-radius:50%;
+  border:1px solid var(--line);background:color-mix(in srgb,var(--bg) 70%,transparent);
+  color:var(--ink);font-size:26px;cursor:pointer;z-index:5;backdrop-filter:blur(8px);transition:all .25s}
+#helix-prev{left:10px}
+#helix-next{right:10px}
+.helix-arrow:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-50%) scale(1.1)}
+.helix-label{text-align:center;font-family:var(--font-d);font-style:italic;font-size:23px;color:var(--ink);margin-bottom:32px;min-height:34px}
+@media(max-width:700px){.helix-stage{height:280px}.h-bar{height:190px;top:-95px}}
+
+/* ============ IMAGE GROUP CIRCLE — orbiting portraits ============ */
+.about-3d{position:relative;min-height:440px}
+.img-orbit{position:absolute;inset:0;pointer-events:none;animation:orbitSpin 38s linear infinite}
+.img-orbit img{position:absolute;width:76px;height:76px;border-radius:50%;object-fit:cover;pointer-events:auto;cursor:pointer;
+  border:2px solid rgba(255,255,255,.4);box-shadow:0 10px 30px rgba(0,0,0,.45),0 0 24px rgba(224,35,122,.25);
+  animation:orbitSpinRev 38s linear infinite;transition:transform .25s}
+.img-orbit img:hover{transform:scale(1.25)}
+@keyframes orbitSpin{to{transform:rotate(360deg)}}
+@keyframes orbitSpinRev{to{transform:rotate(-360deg)}}
+
+/* ============ LIQUID GLASS MAP ============ */
+.map-frame{
+  background:linear-gradient(135deg,rgba(255,255,255,.22),rgba(255,255,255,.05) 40%,rgba(255,255,255,.14));
+  -webkit-backdrop-filter:blur(22px) saturate(1.6);backdrop-filter:blur(22px) saturate(1.6);
+  border:1px solid rgba(255,255,255,.35);
+  box-shadow:0 30px 80px rgba(0,0,0,.45),0 0 70px rgba(224,35,122,.22),
+    inset 0 2px 3px rgba(255,255,255,.5),inset 0 -2px 6px rgba(255,255,255,.12)}
+.map-frame::before{content:"";position:absolute;top:-20%;bottom:-20%;left:-40%;width:36%;z-index:2;pointer-events:none;
+  background:linear-gradient(100deg,transparent,rgba(255,255,255,.35),transparent);
+  transform:skewX(-18deg);animation:mapShine 7s ease-in-out infinite}
+@keyframes mapShine{0%{left:-40%}55%,100%{left:130%}}
+.map-frame::after{content:"";position:absolute;inset:0;border-radius:24px;pointer-events:none;z-index:2;
+  background:radial-gradient(ellipse 120% 60% at 50% -10%,rgba(255,255,255,.28),transparent 55%)}
+.map-frame iframe{position:relative;z-index:1}
