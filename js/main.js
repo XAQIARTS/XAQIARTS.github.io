@@ -109,6 +109,29 @@ document.addEventListener('click', function(e){
     clayRipple();
   }
 });
+/* ---------- Originkit-inspired: cursor ring field ---------- */
+(function(){
+  var ring = document.getElementById('cursor-ring'), dot = document.getElementById('cursor-dot');
+  if(!ring || !window.matchMedia('(pointer:fine)').matches) return;
+  var rx = -500, ry = -500, tx = rx, ty = ry, shown = false;
+  document.addEventListener('mousemove', function(e){
+    tx = e.clientX; ty = e.clientY;
+    dot.style.transform = 'translate('+tx+'px,'+ty+'px)';
+    if(!shown){ ring.style.opacity = '1'; dot.style.opacity = '1'; shown = true; }
+  });
+  document.addEventListener('mouseleave', function(){ ring.style.opacity = '0'; dot.style.opacity = '0'; shown = false; });
+  (function follow(){
+    rx += (tx - rx) * .14; ry += (ty - ry) * .14;
+    ring.style.transform = 'translate('+rx+'px,'+ry+'px)';
+    requestAnimationFrame(follow);
+  })();
+  /* grow ring over interactive elements */
+  document.addEventListener('mouseover', function(e){
+    var hit = e.target.closest('a,button,.work-card,.album-item,.g-tab,.collab-card');
+    ring.style.width = ring.style.height = hit ? '480px' : '340px';
+    ring.style.margin = hit ? '-240px 0 0 -240px' : '-170px 0 0 -170px';
+  });
+})();
 /* ---------- Spatial parallax on mouse ---------- */
 (function(){
   var layers = document.querySelectorAll('.sec-title, .sec-kicker');
@@ -319,6 +342,21 @@ try{
   starGeo.setAttribute('position', new THREE.Float32BufferAttribute(sp, 3));
   scene.add(new THREE.Points(starGeo, new THREE.PointsMaterial({color:0xcfd6ff, size:.07, transparent:true, opacity:.85})));
 
+  /* originkit-style particle drift: colored motes floating upward */
+  var driftGeo = new THREE.BufferGeometry(), dp = [], dc = [];
+  var palette = [[.88,.14,.48],[.96,.73,.26],[.48,.36,1],[.18,.88,.66]];
+  for(var k=0;k<260;k++){
+    dp.push((Math.random()-.5)*30, (Math.random()-.5)*18, (Math.random()-.5)*14);
+    var c = palette[k % palette.length];
+    dc.push(c[0], c[1], c[2]);
+  }
+  driftGeo.setAttribute('position', new THREE.Float32BufferAttribute(dp, 3));
+  driftGeo.setAttribute('color', new THREE.Float32BufferAttribute(dc, 3));
+  var drift = new THREE.Points(driftGeo, new THREE.PointsMaterial({size:.14, vertexColors:true, transparent:true, opacity:.75}));
+  drift.userData.vel = [];
+  for(var k2=0;k2<260;k2++){ drift.userData.vel.push(.004 + Math.random()*.012); }
+  scene.add(drift);
+
   /* floating shapes */
   var shapes = [], geos = [
     new THREE.IcosahedronGeometry(1, 0), new THREE.TorusGeometry(.9, .32, 14, 28),
@@ -357,6 +395,14 @@ try{
       m.position.y = m.userData.y0 + Math.sin(t*2 + m.userData.fy) * m.userData.amp;
     });
     hero.rotation.x += .0035; hero.rotation.y += .005;
+    /* particle drift upward */
+    var pos = drift.geometry.attributes.position, vv = drift.userData.vel;
+    for(var pi=0; pi<pos.count; pi++){
+      var py = pos.getY(pi) + vv[pi];
+      if(py > 9) py = -9;
+      pos.setY(pi, py);
+    }
+    pos.needsUpdate = true;
     var sy = window.scrollY || 0;
     camera.position.x += ((mx*2.2) - camera.position.x) * .04;
     camera.position.y += ((-my*1.4 - sy*.004) - camera.position.y) * .04;
