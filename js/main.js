@@ -1,6 +1,9 @@
 /* ============ XAQI ARTS — main.js ============ */
 (function(){
 "use strict";
+/* safe element helper — never throws on missing elements */
+function $(id){ return document.getElementById(id); }
+function on(id, ev, fn){ var el = $(id); if(el) el.addEventListener(ev, fn); }
 
 /* ---------- loader : logo welcome (fast — never waits on full page load) ---------- */
 var loaderHidden = false;
@@ -19,7 +22,7 @@ try{
   var saved = localStorage.getItem('xaqi-theme');
   if(saved) root.setAttribute('data-theme', saved);
 }catch(e){}
-document.getElementById('theme-toggle').addEventListener('click', function(){
+on('theme-toggle', 'click', function(){
   var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
   root.setAttribute('data-theme', next);
   try{ localStorage.setItem('xaqi-theme', next); }catch(e){}
@@ -176,7 +179,7 @@ document.addEventListener('click', function(e){
     v.muted = !v.muted;
     muteBtn.textContent = v.muted ? '🔇' : '🔊';
   });
-  document.getElementById('intro-fs').addEventListener('click', function(){
+  on('intro-fs', 'click', function(){
     if(v.requestFullscreen) v.requestFullscreen();
     else if(v.webkitEnterFullscreen) v.webkitEnterFullscreen();
   });
@@ -239,14 +242,16 @@ var PROJECTS = [
 var IMG_MANIFEST = {"illustrations":["20150115_131525.jpg","20150115_131604.jpg","20150115_131654.jpg","20150115_131703.jpg","20150115_131713.jpg","20150115_131719.jpg","20150115_131732.jpg","20150115_131740.jpg","20150115_131937.jpg","20150115_131944.jpg","20150115_131950.jpg","20150115_131956.jpg","20150115_132002.jpg","20150115_132007.jpg","20150115_132015.jpg","20150115_132020.jpg","20180418_142405.jpg","20180418_142525.jpg","20180418_142747.jpg","20180418_142757.jpg"],"oil-paintings":["20150115_131630.jpg","20150115_131645.jpg","20150115_131810.jpg","20150115_131818.jpg","20150115_131842.jpg","20150115_131848.jpg","20150115_131858.jpg","20150115_131907.jpg","20180418_142317.jpg","20180418_142359.jpg","20180418_142450.jpg","20180418_142736.jpg","20180422_123522.jpg","20180422_123530.jpg","20180422_123540.jpg","IMG-20210616-WA0000.jpg"],"murals":["20170805_154601.jpg","20170813_130427.jpg","20170813_130459.jpg","20170813_130633.jpg","20180418_142632.jpg","20180418_142649.jpg","20190413_211052.jpg","20190413_211102.jpg","20200306_115535-01.jpg","20200314_120019.jpg","20200314_120025.jpg","IMG-20180327-WA0025.jpg","IMG-20180327-WA0029.jpg","IMG-20180327-WA0033.jpg"],"sketches":["00003269.jpg","20150115_131335.jpg","20150115_131359.jpg","20150115_131433.jpg","20150115_131443.jpg","20170729_220441.jpg","20180418_142519.jpg","20181015_210142.jpg","20181015_210159.jpg","20211216_231919.jpg","20211216_231939.jpg","20211216_231949-01.jpg","20230327_012942-01.jpg","20230329_011750-01.jpg","20230405_061859-01.jpg","20230410_072659-0.jpg","20230418_085528-01.jpg","20230421_024945-01.jpg","20240201_172332.jpg","FB_IMG_1519874612149.jpg","IMG-20250531-WA0003.jpg","IMG_20230415_16053.jpg","mandala 1 2023.jpg"],"characters":["039-arivan-the-last-sentinel.jpg","076-luna-rae.jpg","077-kael.jpg","078-milo.jpg","084-niko.jpg","086-aya.jpg","087-cosmo.jpg","088-elara.jpg","089-orion.jpg","090-nova.jpg","091-lyra.jpg","092-zayn.jpg","093-gora.jpg","095-luma.jpg","096-roko.jpg","098-armand.jpg","099-eloise.jpg","100-lucien.jpg","101-bill.jpg","102-o-ren-ishii.jpg","103-the-bride.jpg"],"photos":["photo-106.jpg","photo-137.jpg","photo-144.jpg","photo-156.jpg","photo-162.jpg","photo-29.jpg","photo-30.jpg","photo-31.jpg","photo-34.jpg","photo-84.jpg","photo-85.jpg","photo-86.jpg"]};
 
 /* ---------- 3D album ring gallery ---------- */
-var ring = document.getElementById('album-ring');
-var caption = document.getElementById('album-caption');
+var ring = $('album-ring');
+var caption = $('album-caption');
 var items = [], angle = 0, curAlbum = 'sketches', radius = 460;
 function prettyName(f){
   return f.replace(/\.(jpg|jpeg|png)$/i,'').replace(/[_\-]+/g,' ').replace(/\s+/g,' ').trim();
 }
 function buildAlbum(name){
-  curAlbum = name; angle = 0; items = []; ring.innerHTML = '';
+  curAlbum = name; angle = 0; items = [];
+  if(!ring) return;
+  ring.innerHTML = '';
   var files = (typeof IMG_MANIFEST !== 'undefined' && IMG_MANIFEST[name]) || [];
   var step = 360 / Math.max(1, files.length);
   files.forEach(function(f, i){
@@ -261,18 +266,20 @@ function buildAlbum(name){
   updateRing(); focusItem(0);
 }
 /* lightbox */
-var lb = document.getElementById('lightbox');
+var lb = $('lightbox');
 function openLightbox(src, cap){
-  document.getElementById('lb-img').src = src;
-  document.getElementById('lb-cap').textContent = cap;
+  if(!lb) return;
+  var _img = $('lb-img'), _cap = $('lb-cap');
+  if(_img) _img.src = src;
+  if(_cap) _cap.textContent = cap;
   lb.classList.add('open'); document.body.style.overflow = 'hidden';
 }
-function closeLightbox(){ lb.classList.remove('open'); document.body.style.overflow = ''; }
-document.getElementById('lb-close').addEventListener('click', closeLightbox);
+function closeLightbox(){ if(lb) lb.classList.remove('open'); document.body.style.overflow = ''; }
+on('lb-close', 'click', closeLightbox);
 lb.addEventListener('click', function(e){ if(e.target === lb) closeLightbox(); });
 document.addEventListener('keydown', function(e){ if(e.key === 'Escape'){ closeLightbox(); closeFullgal(); } });
 /* full gallery */
-var fg = document.getElementById('fullgal');
+var fg = $('fullgal');
 function openFullgal(){
   var grid = document.getElementById('fg-grid'); grid.innerHTML = '';
   function render(m){
@@ -289,14 +296,14 @@ function openFullgal(){
   if(typeof IMG_MANIFEST !== 'undefined'){ render(IMG_MANIFEST); }
   else { fetch('assets/img/manifest.json').then(function(r){ return r.json(); }).then(render); }
 }
-function closeFullgal(){ fg.classList.remove('open'); document.body.style.overflow = ''; }
-document.getElementById('open-fullgal').addEventListener('click', openFullgal);
-document.getElementById('fg-close').addEventListener('click', closeFullgal);
+function closeFullgal(){ if(fg) fg.classList.remove('open'); document.body.style.overflow = ''; }
+on('open-fullgal', 'click', openFullgal);
+on('fg-close', 'click', closeFullgal);
 /* achievement images open in lightbox */
 document.querySelectorAll('.achieve-card img').forEach(function(img){
   img.addEventListener('click', function(){ openLightbox(img.src, img.alt); });
 });
-function updateRing(){ ring.style.transform = 'translateZ(-'+radius+'px) rotateY('+angle+'deg)'; }
+function updateRing(){ if(ring) ring.style.transform = 'translateZ(-'+radius+'px) rotateY('+angle+'deg)'; }
 function focusItem(i){
   items.forEach(function(d){ d.classList.remove('focus'); });
   if(!items.length) return;
@@ -304,12 +311,12 @@ function focusItem(i){
   var step = 360 / n;
   angle = -idx * step; updateRing();
   items[idx].classList.add('focus');
-  caption.textContent = prettyName(items[idx].querySelector('img').alt);
+  if(caption){ var _img = items[idx].querySelector('img'); if(_img && _img.alt) caption.textContent = prettyName(_img.alt); }
   ring.dataset.idx = idx;
 }
 function stepAlbum(dir){ focusItem((+ring.dataset.idx || 0) + dir); }
-document.getElementById('album-prev').addEventListener('click', function(){ stepAlbum(-1); });
-document.getElementById('album-next').addEventListener('click', function(){ stepAlbum(1); });
+on('album-prev', 'click', function(){ stepAlbum(-1); });
+on('album-next', 'click', function(){ stepAlbum(1); });
 /* ---------- XYLOPHONE HELIX — album selector ---------- */
 var ALBUMS = [
   {id:'sketches',      short:'Sketches', label:'Sketches'},
@@ -351,8 +358,8 @@ var ALBUMS = [
     buildAlbum(ALBUMS[cur].id);
     pokeIdle();
   }
-  document.getElementById('helix-prev').addEventListener('click', function(){ select(cur-1); });
-  document.getElementById('helix-next').addEventListener('click', function(){ select(cur+1); });
+  on('helix-prev', 'click', function(){ select(cur-1); });
+  on('helix-next', 'click', function(){ select(cur+1); });
   /* drag / swipe to spin */
   var sx = 0, dragging = false, moved = 0;
   stage.addEventListener('pointerdown', function(e){
