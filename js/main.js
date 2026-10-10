@@ -244,7 +244,10 @@ function prettyName(f){
 }
 function buildAlbum(name){
   curAlbum = name; angle = 0; items = []; ring.innerHTML = '';
-  fetch('assets/img/manifest.json').then(function(r){ return r.json(); }).then(function(m){
+  fetch('assets/img/manifest.json').then(function(r){
+    if(!r.ok) throw new Error('manifest HTTP '+r.status);
+    return r.json();
+  }).then(function(m){
     var files = m[name] || [];
     var step = 360 / files.length;
     files.forEach(function(f, i){
@@ -257,6 +260,10 @@ function buildAlbum(name){
       d.addEventListener('click', function(){ openLightbox('assets/img/'+name+'/'+f, prettyName(f)); });
     });
     updateRing(); focusItem(0);
+  }).catch(function(){
+    /* retry once after 2s (transient network/CDN hiccup) */
+    if(!buildAlbum._retried){ buildAlbum._retried = true; setTimeout(function(){ buildAlbum(name); }, 2000); }
+    else { buildAlbum._retried = false; }
   });
 }
 /* lightbox */
@@ -493,14 +500,54 @@ SOCIALS.forEach(function(s){
   })();
 })();
 
+/* ---------- 2D FALLBACK background (runs if WebGL unavailable) ---------- */
+function bgFallback2D(canvas){
+  var ctx = canvas.getContext('2d');
+  var W = 0, H = 0, stars = [], blobs = [], i;
+  var COLORS = ['224,35,122','245,185,66','122,92,255','45,225,168'];
+  function resize(){ W = canvas.width = window.innerWidth; H = canvas.height = window.innerHeight; }
+  window.addEventListener('resize', resize); resize();
+  var n = window.innerWidth < 700 ? 90 : 160;
+  for(i=0;i<n;i++) stars.push({x:Math.random(), y:Math.random(), r:.4+Math.random()*1.6, s:.06+Math.random()*.25, tw:Math.random()*6.28});
+  for(i=0;i<5;i++) blobs.push({x:Math.random(), y:Math.random(), r:.18+Math.random()*.22, c:COLORS[i%COLORS.length], vx:(Math.random()-.5)*.0006, vy:(Math.random()-.5)*.0006});
+  var t = 0;
+  (function tick(){
+    requestAnimationFrame(tick); t += .016;
+    var sy = (window.scrollY || 0) * .00012;
+    ctx.clearRect(0,0,W,H);
+    var bi;
+    for(bi=0;bi<blobs.length;bi++){
+      var bl = blobs[bi];
+      bl.x += bl.vx; bl.y += bl.vy;
+      if(bl.x<-.3||bl.x>1.3) bl.vx *= -1;
+      if(bl.y<-.3||bl.y>1.3) bl.vy *= -1;
+      var bx = bl.x*W, by = ((bl.y - sy) % 1.3 + 1.3) % 1.3 * H, br = bl.r*Math.min(W,H);
+      var g = ctx.createRadialGradient(bx,by,0,bx,by,br);
+      g.addColorStop(0,'rgba('+bl.c+',.20)');
+      g.addColorStop(1,'rgba('+bl.c+',0)');
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.arc(bx,by,br,0,6.2832); ctx.fill();
+    }
+    var si;
+    for(si=0;si<stars.length;si++){
+      var st = stars[si];
+      st.y += st.s*.016; if(st.y > 1.02) st.y = -.02;
+      var sx = st.x*W, syy = ((st.y - sy) % 1.04 + 1.04) % 1.04 * H;
+      var tw = .45 + .35*Math.sin(t*2 + st.tw);
+      ctx.fillStyle = 'rgba(207,214,255,'+tw.toFixed(3)+')';
+      ctx.beginPath(); ctx.arc(sx,syy,st.r,0,6.2832); ctx.fill();
+    }
+  })();
+}
+
 /* ---------- THREE.js : fixed full-page 3D background ---------- */
 (function(){
+var canvas = document.getElementById('bg-3d');
+if(!canvas) return;
 try{
-  if(!window.THREE) return;
+  if(!window.THREE) throw new Error('no THREE');
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   var smallScreen = window.innerWidth < 700;
-  var canvas = document.getElementById('bg-3d');
-  if(!canvas) return;
   var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true, alpha:true});
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5));
   var scene = new THREE.Scene();
@@ -602,7 +649,7 @@ try{
   }
   if(reduceMotion){ frame(); }
   else{ (function tick(){ requestAnimationFrame(tick); frame(); })(); }
-}catch(err){ /* background 3D optional — page works without WebGL */ }
+}catch(err){ bgFallback2D(canvas); }
 })();
 
 /* ---------- lazy alt intro videos (inside <details>) ---------- */
