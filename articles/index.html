@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Articles | XAQI arts</title>
+<meta name="description" content="Articles by and about Saqib Maqbool Khan — XAQI arts. Biographies, stories and notes from the studio. #xaqiarts">
+<link rel="icon" type="image/png" href="../assets/logo/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css?v=6">
+<link rel="stylesheet" href="article.css">
+</head>
+<body>
+
+<div class="article-topbar">
+  <a href="../" class="nav-brand"><img src="../assets/logo/logo.png" alt="XAQI arts"><span>XAQI ARTS</span></a>
+  <div class="topbar-right">
+    <a href="../" class="back-link">← Home</a>
+    <button id="theme-toggle" aria-label="Toggle light / dark theme">◐</button>
+  </div>
+</div>
+
+<main class="article-wrap">
+  <p class="article-kicker">Stories · Notes · #xaqiarts</p>
+  <h1 class="article-title">Articles</h1>
+  <p class="article-meta">From the studio and the journey — by and about Saqib Maqbool Khan.</p>
+
+  <div class="articles-list">
+    <a class="article-card" href="saqib-maqbool-khan-biography.html">
+      <img class="thumb" src="../assets/articles/bio/portrait-hero.jpg" alt="Saqib Maqbool Khan — portrait">
+      <div class="card-body">
+        <p class="card-kicker">Biography</p>
+        <h2>Saqib Maqbool Khan — Biography</h2>
+        <p>From Mr. Attock 2012 to media life, from state-level medals to AI art — the story of the visual artist behind XAQI arts.</p>
+        <p class="card-meta">17 October 2026 · 5 min read</p>
+      </div>
+    </a>
+  </div>
+
+  <div class="article-footer">
+    <span>© 2026 Saqib Maqbool Khan · XAQI arts</span>
+    <a href="../" class="back-link">← Home</a>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <img src="../assets/logo/logo.png" alt="XAQI arts logo" class="foot-logo">
+    <p>© 2026 Saqib Maqbool Khan · XAQI arts — crafted with open-source tools. This site's code is public on GitHub.</p>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var t=document.getElementById('theme-toggle');
+  try{var s=localStorage.getItem('xaqi-theme');if(s)document.documentElement.setAttribute('data-theme',s);}catch(e){}
+  t.addEventListener('click',function(){
+    var cur=document.documentElement.getAttribute('data-theme')==='light'?'dark':'light';
+    document.documentElement.setAttribute('data-theme',cur);
+    try{localStorage.setItem('xaqi-theme',cur);}catch(e){}
+  });
+})();
+</script>
+</body>
+</html>
