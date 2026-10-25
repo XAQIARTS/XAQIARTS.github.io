@@ -121,7 +121,7 @@ function clayRipple(){
   setTimeout(function(){ document.body.classList.remove('clay-time'); }, 700);
 }
 document.addEventListener('click', function(e){
-  if(e.target.closest('.proj-card') || e.target.closest('.album-item') || e.target.closest('#projects-grid')){
+  if(e.target.closest('.proj-card') || e.target.closest('.sgal-item') || e.target.closest('#projects-grid')){
     clayRipple();
   }
 });
@@ -143,7 +143,7 @@ document.addEventListener('click', function(e){
   })();
   /* grow ring over interactive elements */
   document.addEventListener('mouseover', function(e){
-    var hit = e.target.closest('a,button,.work-card,.album-item,.g-tab,.collab-card');
+    var hit = e.target.closest('a,button,.work-card,.sgal-item,.g-tab,.collab-card');
     ring.style.width = ring.style.height = hit ? '480px' : '340px';
     ring.style.margin = hit ? '-240px 0 0 -240px' : '-170px 0 0 -170px';
   });
@@ -239,26 +239,8 @@ var PROJECTS = [
 var IMG_MANIFEST = {"illustrations":["20150115_131525.jpg","20150115_131604.jpg","20150115_131654.jpg","20150115_131703.jpg","20150115_131713.jpg","20150115_131719.jpg","20150115_131732.jpg","20150115_131740.jpg","20150115_131937.jpg","20150115_131944.jpg","20150115_131950.jpg","20150115_131956.jpg","20150115_132002.jpg","20150115_132007.jpg","20150115_132015.jpg","20150115_132020.jpg","20180418_142405.jpg","20180418_142525.jpg","20180418_142747.jpg","20180418_142757.jpg"],"oil-paintings":["20150115_131630.jpg","20150115_131645.jpg","20150115_131810.jpg","20150115_131818.jpg","20150115_131842.jpg","20150115_131848.jpg","20150115_131858.jpg","20150115_131907.jpg","20180418_142317.jpg","20180418_142359.jpg","20180418_142450.jpg","20180418_142736.jpg","20180422_123522.jpg","20180422_123530.jpg","20180422_123540.jpg","IMG-20210616-WA0000.jpg"],"murals":["20170805_154601.jpg","20170813_130427.jpg","20170813_130459.jpg","20170813_130633.jpg","20180418_142632.jpg","20180418_142649.jpg","20190413_211052.jpg","20190413_211102.jpg","20200306_115535-01.jpg","20200314_120019.jpg","20200314_120025.jpg","IMG-20180327-WA0025.jpg","IMG-20180327-WA0029.jpg","IMG-20180327-WA0033.jpg"],"sketches":["00003269.jpg","20150115_131335.jpg","20150115_131359.jpg","20150115_131433.jpg","20150115_131443.jpg","20170729_220441.jpg","20180418_142519.jpg","20181015_210142.jpg","20181015_210159.jpg","20211216_231919.jpg","20211216_231939.jpg","20211216_231949-01.jpg","20230327_012942-01.jpg","20230329_011750-01.jpg","20230405_061859-01.jpg","20230410_072659-0.jpg","20230418_085528-01.jpg","20230421_024945-01.jpg","20240201_172332.jpg","FB_IMG_1519874612149.jpg","IMG-20250531-WA0003.jpg","IMG_20230415_16053.jpg","mandala 1 2023.jpg"],"characters":["039-arivan-the-last-sentinel.jpg","076-luna-rae.jpg","077-kael.jpg","078-milo.jpg","084-niko.jpg","086-aya.jpg","087-cosmo.jpg","088-elara.jpg","089-orion.jpg","090-nova.jpg","091-lyra.jpg","092-zayn.jpg","093-gora.jpg","095-luma.jpg","096-roko.jpg","098-armand.jpg","099-eloise.jpg","100-lucien.jpg","101-bill.jpg","102-o-ren-ishii.jpg","103-the-bride.jpg"],"photos":["photo-106.jpg","photo-137.jpg","photo-144.jpg","photo-156.jpg","photo-162.jpg","photo-29.jpg","photo-30.jpg","photo-31.jpg","photo-34.jpg","photo-84.jpg","photo-85.jpg","photo-86.jpg"]};
 
 /* ---------- 3D album ring gallery ---------- */
-var ring = document.getElementById('album-ring');
-var caption = document.getElementById('album-caption');
-var items = [], angle = 0, curAlbum = 'sketches', radius = 460;
 function prettyName(f){
   return f.replace(/\.(jpg|jpeg|png)$/i,'').replace(/[_\-]+/g,' ').replace(/\s+/g,' ').trim();
-}
-function buildAlbum(name){
-  curAlbum = name; angle = 0; items = []; ring.innerHTML = '';
-  var files = (typeof IMG_MANIFEST !== 'undefined' && IMG_MANIFEST[name]) || [];
-  var step = 360 / Math.max(1, files.length);
-  files.forEach(function(f, i){
-    var d = document.createElement('div');
-    d.className = 'album-item';
-    d.style.transform = 'rotateY('+(i*step)+'deg) translateZ('+radius+'px)';
-    var img = document.createElement('img');
-    img.src = 'assets/img/'+name+'/'+f; img.alt = prettyName(f); img.loading = 'lazy';
-    d.appendChild(img); ring.appendChild(d); items.push(d);
-    d.addEventListener('click', function(){ openLightbox('assets/img/'+name+'/'+f, prettyName(f)); });
-  });
-  updateRing(); focusItem(0);
 }
 /* lightbox */
 var lb = document.getElementById('lightbox');
@@ -296,99 +278,101 @@ document.getElementById('fg-close').addEventListener('click', closeFullgal);
 document.querySelectorAll('.achieve-card img').forEach(function(img){
   img.addEventListener('click', function(){ openLightbox(img.src, img.alt); });
 });
-function updateRing(){ ring.style.transform = 'translateZ(-'+radius+'px) rotateY('+angle+'deg)'; }
-function focusItem(i){
-  items.forEach(function(d){ d.classList.remove('focus'); });
-  if(!items.length) return;
-  var n = items.length, idx = ((i % n) + n) % n;
-  var step = 360 / n;
-  angle = -idx * step; updateRing();
-  items[idx].classList.add('focus');
-  caption.textContent = prettyName(items[idx].querySelector('img').alt);
-  ring.dataset.idx = idx;
-}
-function stepAlbum(dir){ focusItem((+ring.dataset.idx || 0) + dir); }
-document.getElementById('album-prev').addEventListener('click', function(){ stepAlbum(-1); });
-document.getElementById('album-next').addEventListener('click', function(){ stepAlbum(1); });
-/* ---------- XYLOPHONE HELIX — album selector ---------- */
-var ALBUMS = [
-  {id:'sketches',      short:'Sketches', label:'Sketches'},
-  {id:'oil-paintings', short:'Oils',     label:'Oil Paintings'},
-  {id:'illustrations', short:'Illust',   label:'Illustrations'},
-  {id:'characters',    short:'Chars',    label:'Pixar 3D Styled Character Storyboard'},
-  {id:'photos',        short:'Photos',   label:'Photos'},
-  {id:'murals',        short:'Murals',   label:'Murals'}
-];
-(function(){
-  var stage = document.getElementById('helix-stage');
-  var helix = document.getElementById('helix');
-  var label = document.getElementById('helix-label');
-  if(!stage || !helix) return;
-  var n = ALBUMS.length, step = 360/n;
-  var R = Math.min(300, window.innerWidth*.34);
-  var bars = [], rot = 0, targetRot = 0, cur = 0, idle = true, idleTimer = null;
-  ALBUMS.forEach(function(a, i){
-    var b = document.createElement('div');
-    b.className = 'h-bar' + (i===0 ? ' active' : '');
-    var ang = i*step;
-    var y = Math.sin(ang*Math.PI/180) * 46; /* helix twist */
-    b.style.transform = 'rotateY('+ang+'deg) translateZ('+R+'px) translateY('+y.toFixed(1)+'px)';
-    b.innerHTML = '<span>'+a.short+'</span>';
-    b.addEventListener('click', function(ev){ ev.stopPropagation(); select(i); });
-    helix.appendChild(b); bars.push(b);
-  });
-  function pokeIdle(){
-    idle = false;
-    clearTimeout(idleTimer);
-    idleTimer = setTimeout(function(){ idle = true; }, 6000);
-  }
-  function select(i){
-    cur = ((i % n) + n) % n;
-    var want = -cur*step;
-    targetRot = want + Math.round((rot - want)/360)*360; /* nearest equivalent angle */
-    bars.forEach(function(b, bi){ b.classList.toggle('active', bi===cur); });
-    label.textContent = ALBUMS[cur].label;
-    buildAlbum(ALBUMS[cur].id);
-    pokeIdle();
-  }
-  document.getElementById('helix-prev').addEventListener('click', function(){ select(cur-1); });
-  document.getElementById('helix-next').addEventListener('click', function(){ select(cur+1); });
-  /* drag / swipe to spin */
-  var sx = 0, dragging = false, moved = 0;
-  stage.addEventListener('pointerdown', function(e){
-    dragging = true; sx = e.clientX; moved = 0; pokeIdle();
-    try{ stage.setPointerCapture(e.pointerId); }catch(err){}
-  });
-  stage.addEventListener('pointermove', function(e){
-    if(!dragging) return;
-    var dx = e.clientX - sx; sx = e.clientX; moved += Math.abs(dx);
-    rot += dx*.45; targetRot = rot;
-  });
-  stage.addEventListener('pointerup', function(){
-    if(!dragging) return;
-    dragging = false;
-    if(moved > 10){ select(Math.round(-rot/step)); } /* snap to nearest bar */
-    else pokeIdle();
-  });
-  (function spin(){
-    requestAnimationFrame(spin);
-    if(!dragging){
-      if(idle) targetRot += .12;
-      rot += (targetRot - rot) * .07;
-    }
-    helix.style.transform = 'translateZ(-'+R+'px) rotateY('+rot+'deg)';
-  })();
-  window.addEventListener('resize', function(){ R = Math.min(300, window.innerWidth*.34); });
-})();
-/* drag to spin */
-(function(){
-  var stage = document.querySelector('.album-stage'), sx = 0, dragging = false;
-  stage.addEventListener('pointerdown', function(e){ dragging = true; sx = e.clientX; stage.setPointerCapture(e.pointerId); });
-  stage.addEventListener('pointermove', function(e){ if(!dragging) return; angle += (e.clientX - sx) * .25; sx = e.clientX; updateRing(); });
-  stage.addEventListener('pointerup', function(){ dragging = false; });
-})();
-buildAlbum('sketches');
 
+/* ---------- SCROLL GALLERY — Favourite #3 pinned steps ---------- */
+(function(){
+  var track = document.getElementById('gallery-scroll');
+  if(!track) return;
+  var stage = track.querySelector('.sgal-stage');
+  var word = track.querySelector('.sgal-word');
+  var steps = Array.prototype.slice.call(track.querySelectorAll('.sgal-step'));
+  var bar = document.getElementById('sgal-bar');
+  if(!stage || !steps.length) return;
+  /* clicks open the existing lightbox — larger view only; downloads stay
+     routed to Behance / Pinterest inside the lightbox, as before */
+  steps.forEach(function(step){
+    step.querySelectorAll('.sgal-item').forEach(function(fig){
+      fig.addEventListener('click', function(){
+        var img = fig.querySelector('img');
+        openLightbox(img.getAttribute('data-full') || img.src, img.getAttribute('data-cap') || img.alt);
+      });
+    });
+  });
+  /* pinned scrub only where it belongs: wide screens, motion allowed */
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var saveData = !!(navigator.connection && navigator.connection.saveData);
+  if(window.innerWidth < 768 || reduce || saveData) return; /* CSS fallback stays */
+  document.documentElement.classList.add('sgal-on');
+
+  /* per-step palettes: [bgTop, bgBottom, word] — near-black navy family, one cyan-lit accent */
+  var PAL = [
+    [[6,10,22],[12,20,48],[38,58,110]],
+    [[7,10,30],[19,28,77],[44,64,128]],
+    [[4,16,29],[8,42,68],[30,90,130]],
+    [[11,7,36],[29,20,80],[70,54,140]],
+    [[6,15,31],[16,40,63],[40,84,120]],
+    [[4,20,26],[10,48,56],[26,96,110]]
+  ];
+  function mix(a, b, t){ return [a[0]+(b[0]-a[0])*t, a[1]+(b[1]-a[1])*t, a[2]+(b[2]-a[2])*t]; }
+  function rgb(c, al){ return 'rgba('+Math.round(c[0])+','+Math.round(c[1])+','+Math.round(c[2])+','+(al == null ? 1 : al)+')'; }
+  var rows = steps.map(function(s){ return s.querySelector('.sgal-row'); });
+  var copies = steps.map(function(s){ return s.querySelector('.sgal-copy'); });
+  var figs = rows.map(function(r){ return Array.prototype.slice.call(r.querySelectorAll('.sgal-item')); });
+  var vis = steps.map(function(){ return true; });
+  var N = steps.length;
+  var target = 0, current = -1, running = false, inView = false;
+
+  function measure(){
+    var r = track.getBoundingClientRect();
+    var total = r.height - window.innerHeight;
+    target = total > 0 ? Math.min(1, Math.max(0, -r.top / total)) : 0;
+  }
+  function render(p){
+    var x = p * (N - 1); /* dwell coordinate: step i is fully presented at x = i */
+    var fi = Math.min(N - 1, Math.floor(x)), fj = Math.min(N - 1, fi + 1), ft = Math.min(1, Math.max(0, x - fi));
+    stage.style.background = 'linear-gradient(180deg,' + rgb(mix(PAL[fi][0], PAL[fj][0], ft)) + ',' + rgb(mix(PAL[fi][1], PAL[fj][1], ft)) + ')';
+    word.style.color = rgb(mix(PAL[fi][2], PAL[fj][2], ft), .5);
+    word.style.transform = 'translate3d(' + (6 - 32 * p).toFixed(2) + 'vw,-50%,0)';
+    steps.forEach(function(step, i){
+      var d = x - i;
+      var w = Math.min(1, Math.max(0, 1.15 - Math.abs(d) * 1.9));
+      var lp = Math.min(1, Math.max(0, x - i + .5));
+      step.style.opacity = w.toFixed(3);
+      var v = w > 0.004;
+      if(v !== vis[i]){ vis[i] = v; step.style.visibility = v ? 'visible' : 'hidden'; }
+      step.style.pointerEvents = w > .5 ? 'auto' : 'none';
+      rows[i].style.transform = 'translate3d(' + (78 - 80 * lp).toFixed(2) + 'vw,-50%,0)';
+      var swell = .95 + .06 * Math.sin(Math.PI * lp);
+      figs[i].forEach(function(fig, j){
+        var drift = Math.sin(Math.PI * lp + j * .7) * 1.6 * (parseFloat(fig.getAttribute('data-depth')) || 1);
+        fig.style.transform = 'translateY(' + drift.toFixed(2) + 'vh) scale(' + swell.toFixed(3) + ')';
+      });
+      copies[i].style.transform = 'translateY(calc(-50% + ' + ((1 - w) * 26).toFixed(1) + 'px))';
+      copies[i].style.opacity = w.toFixed(3);
+    });
+    if(bar) bar.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+  }
+  function tick(){
+    current += (target - current) * .085;
+    if(Math.abs(target - current) < .0004) current = target;
+    render(current);
+    if(current !== target && inView){ requestAnimationFrame(tick); }
+    else { running = false; }
+  }
+  function kick(){
+    measure();
+    if(current < 0){ current = target; render(current); return; }
+    if(!running && inView){ running = true; requestAnimationFrame(tick); }
+  }
+  if('IntersectionObserver' in window){
+    new IntersectionObserver(function(es){
+      es.forEach(function(e){ inView = e.isIntersecting; if(inView) kick(); });
+    }, {rootMargin: '60% 0px'}).observe(track);
+  } else { inView = true; }
+  window.addEventListener('scroll', kick, {passive: true});
+  window.addEventListener('resize', kick);
+  kick();
+})();
 /* ---------- IMAGE GROUP CIRCLE — orbiting portraits in About ---------- */
 (function(){
   var orbit = document.getElementById('img-orbit');

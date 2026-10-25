@@ -402,3 +402,46 @@ body{counter-reset:ryven-sec}
 #hero{border-top:none}
 .marquee{border-top:none}
 @media(max-width:860px){.section{padding:56px 0}}
+
+/* ============ SCROLL GALLERY — Favourite #3 (pinned steps) ============ */
+/* Default layout below IS the fallback: no-JS, mobile, reduced-motion and
+   save-data all render this stacked scroll-snap version. JS adds html.sgal-on
+   (desktop, motion-safe only) to switch on the pinned scrub experience. */
+.sgal{position:relative;z-index:1;margin-top:6px}
+.sgal-stage{position:relative;overflow:hidden;background:linear-gradient(180deg,#060a16,#0c1430)}
+.sgal-word{position:absolute;top:2vh;left:50%;transform:translateX(-50%);white-space:nowrap;
+  font-family:var(--font-b);font-weight:700;font-size:24vw;line-height:1;color:rgba(120,170,255,.07);
+  pointer-events:none;z-index:0;user-select:none}
+.sgal-step{position:relative;z-index:1;padding:64px 24px 30px;max-width:1180px;margin:0 auto}
+.sgal-copy{position:relative;z-index:3;margin-bottom:24px}
+.sgal-num{font-family:var(--font-b);font-weight:700;line-height:.88;font-size:clamp(64px,10vw,118px);color:#3fc1ff;letter-spacing:.01em}
+.sgal-kicker{letter-spacing:.35em;text-transform:uppercase;font-size:11px;color:#8fb8e8;margin:14px 0 8px}
+.sgal-title{font-family:var(--font-d);font-weight:900;font-size:clamp(32px,4.6vw,54px);line-height:1.02;color:#f2f6ff}
+.sgal-text{color:#a9bcd9;font-size:16px;line-height:1.65;max-width:430px;margin-top:12px}
+.sgal-hint{color:#5f7ba6;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;margin-top:16px}
+.sgal-row{display:flex;gap:18px;overflow-x:auto;scroll-snap-type:x mandatory;padding:8px 2px 22px;-webkit-overflow-scrolling:touch}
+.sgal-row::-webkit-scrollbar{height:6px}
+.sgal-row::-webkit-scrollbar-thumb{background:rgba(63,193,255,.35);border-radius:3px}
+.sgal-item{flex:0 0 auto;scroll-snap-align:center;margin:0;cursor:pointer;border-radius:14px;overflow:hidden;
+  background:#0a0f1e;box-shadow:0 24px 60px rgba(0,0,0,.5)}
+.sgal-item img{height:300px;width:auto;max-width:80vw;object-fit:cover;transition:transform .35s ease-out}
+.sgal-item:hover img{transform:scale(1.05)}
+.sgal-item:nth-child(even){margin-top:26px}
+.sgal-progress{display:none}
+/* ---- pinned mode (html.sgal-on, set by JS after support checks) ---- */
+html.sgal-on .sgal{height:380vh}
+html.sgal-on .sgal-stage{position:sticky;top:0;height:100vh;height:100svh}
+html.sgal-on .sgal-word{top:50%;left:0;font-size:42vw;color:rgba(120,170,255,.5);will-change:transform}
+html.sgal-on .sgal-step{position:absolute;inset:0;max-width:none;padding:0}
+html.sgal-on .sgal-copy{position:absolute;left:6vw;top:50%;width:31vw;margin:0;will-change:transform,opacity}
+html.sgal-on .sgal-row{position:absolute;left:0;top:50%;width:max-content;overflow:visible;scroll-snap-type:none;
+  padding:0;gap:2vw;align-items:center;will-change:transform}
+html.sgal-on .sgal-item{box-shadow:0 34px 80px rgba(0,0,0,.55)}
+html.sgal-on .sgal-item img{height:47vh;width:15vw;max-width:none;object-fit:cover}
+html.sgal-on .sgal-item:nth-child(1){margin-top:0}
+html.sgal-on .sgal-item:nth-child(2){margin-top:7vh}
+html.sgal-on .sgal-item:nth-child(3){margin-top:-3vh}
+html.sgal-on .sgal-item:nth-child(4){margin-top:5vh}
+html.sgal-on .sgal-item:nth-child(5){margin-top:-1vh}
+html.sgal-on .sgal-progress{display:block;position:absolute;left:0;right:0;bottom:0;height:2px;z-index:4;background:rgba(255,255,255,.08)}
+html.sgal-on .sgal-progress span{display:block;height:100%;background:#35c4ff;transform-origin:0 50%;transform:scaleX(0)}

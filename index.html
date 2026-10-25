@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=6">
+<link rel="stylesheet" href="css/style.css?v=8">
 </head>
 <body>
 
@@ -172,27 +172,115 @@
   </div>
 </section>
 
-<!-- 3D GALLERY ALBUM -->
+<!-- SCROLL GALLERY — Favourite #3 pinned steps -->
 <section id="gallery" class="section">
   <div class="wrap">
-    <p class="sec-kicker reveal">3D Gallery Album</p>
+    <p class="sec-kicker reveal">Gallery Album</p>
     <h2 class="sec-title reveal">Hand-made <em>worlds</em></h2>
-    <p class="sec-lead reveal">Sketches &amp; oil paintings, floating in 3D space. Drag to spin the album.</p>
+    <p class="sec-lead reveal">Six hand-made worlds on one stage — keep scrolling and each world takes the spotlight in turn. Click any piece for the larger view.</p>
     <div class="reveal" style="text-align:center;margin-bottom:22px"><button class="btn" id="open-fullgal">View Complete Gallery</button></div>
-    <div class="helix-stage reveal" id="helix-stage">
-      <div class="helix" id="helix"><!-- album bars injected by JS --></div>
-      <button class="helix-arrow" id="helix-prev" aria-label="Previous album">‹</button>
-      <button class="helix-arrow" id="helix-next" aria-label="Next album">›</button>
-    </div>
-    <div class="helix-label" id="helix-label">Sketches</div>
-    <div class="album-stage reveal">
-      <div class="album-ring" id="album-ring"><!-- items injected by JS --></div>
-      <div class="album-controls">
-        <button id="album-prev" aria-label="Previous">‹</button>
-        <button id="album-next" aria-label="Next">›</button>
+  </div>
+  <div class="sgal" id="gallery-scroll">
+    <div class="sgal-stage">
+      <div class="sgal-word" aria-hidden="true">XAQI</div>
+      <div class="sgal-step" data-step="0">
+        <div class="sgal-copy">
+          <p class="sgal-num" aria-hidden="true">01</p>
+          <p class="sgal-kicker">Gallery &mdash; World 01 / 06</p>
+          <h3 class="sgal-title">Sketches</h3>
+          <p class="sgal-text">Charcoal, graphite and ink — the hand before the machine. Portraits and studies drawn the slow way.</p>
+          <p class="sgal-hint">Click any piece for the larger view</p>
+        </div>
+        <div class="sgal-row">
+        <figure class="sgal-item" data-depth="0.90"><img src="assets/img/sketches/00003269.jpg" alt="00003269" data-full="assets/img/sketches/00003269.jpg" data-cap="00003269"></figure>
+        <figure class="sgal-item" data-depth="1.00"><img src="assets/img/sketches/20150115_131335.jpg" alt="20150115 131335" data-full="assets/img/sketches/20150115_131335.jpg" data-cap="20150115 131335"></figure>
+        <figure class="sgal-item" data-depth="1.10"><img src="assets/img/sketches/20150115_131359.jpg" alt="20150115 131359" data-full="assets/img/sketches/20150115_131359.jpg" data-cap="20150115 131359" loading="lazy" decoding="async"></figure>
+        <figure class="sgal-item" data-depth="0.90"><img src="assets/img/sketches/20150115_131433.jpg" alt="20150115 131433" data-full="assets/img/sketches/20150115_131433.jpg" data-cap="20150115 131433" loading="lazy" decoding="async"></figure>
+        <figure class="sgal-item" data-depth="1.00"><img src="assets/img/sketches/20150115_131443.jpg" alt="20150115 131443" data-full="assets/img/sketches/20150115_131443.jpg" data-cap="20150115 131443" loading="lazy" decoding="async"></figure>
+        </div>
       </div>
+      <div class="sgal-step" data-step="1">
+        <div class="sgal-copy">
+          <p class="sgal-num" aria-hidden="true">02</p>
+          <p class="sgal-kicker">Gallery &mdash; World 02 / 06</p>
+          <h3 class="sgal-title">Oil Paintings</h3>
+          <p class="sgal-text">Impasto oils on canvas — colour laid on thick, from the years before AI entered the studio.</p>
+          <p class="sgal-hint">Click any piece for the larger view</p>
+        </div>
+        <div class="sgal-row">
+        <figure class="sgal-item" data-depth="0.90"><img src="assets/img/oil-paintings/20150115_131630.jpg" alt="20150115 131630" data-full="assets/img/oil-paintings/20150115_131630.jpg" data-cap="20150115 131630"></figure>
+        <figure class="sgal-item" data-depth="1.00"><img src="assets/img/oil-paintings/20150115_131645.jpg" alt="20150115 131645" data-full="assets/img/oil-paintings/20150115_131645.jpg" data-cap="20150115 131645"></figure>
+        <figure class="sgal-item" data-depth="1.10"><img src="assets/img/oil-paintings/20150115_131810.jpg" alt="20150115 131810" data-full="assets/img/oil-paintings/20150115_131810.jpg" data-cap="20150115 131810" loading="lazy" decoding="async"></figure>
+        <figure class="sgal-item" data-depth="0.90"><img src="assets/img/oil-paintings/20150115_131818.jpg" alt="20150115 131818" data-full="assets/img/oil-paintings/20150115_131818.jpg" data-cap="20150115 131818" loading="lazy" decoding="async"></figure>
+        <figure class="sgal-item" data-depth="1.00"><img src="assets/img/oil-paintings/20150115_131842.jpg" alt="20150115 131842" data-full="assets/img/oil-paintings/20150115_131842.jpg" data-cap="20150115 131842" loading="lazy" decoding="async"></figure>
+        </div>
+      </div>
+      <div class="sgal-step" data-step="2">
+        <div class="sgal-copy">
+          <p class="sgal-num" aria-hidden="true">03</p>
+          <p class="sgal-kicker">Gallery &mdash; World 03 / 06</p>
+          <h3 class="sgal-title">Illustrations</h3>
+          <p class="sgal-text">Ink and colour studies — characters, scenes and experiments from the sketchbook years.</p>
+          <p class="sgal-hint">Click any piece for the larger view</p>
+        </div>
+        <div class="sgal-row">
+        <figure class="sgal-item" data-depth="0.90"><img src="assets/img/illustrations/20150115_131525.jpg" alt="20150115 131525" data-full="assets/img/illustrations/20150115_131525.jpg" data-cap="20150115 131525"></figure>
+        <figure class="sgal-item" data-depth="1.00"><img src="assets/img/illustrations/20150115_131604.jpg" alt="20150115 131604" data-full="assets/img/illustrations/20150115_131604.jpg" data-cap="20150115 131604"></figure>
+        <figure class="sgal-item" data-depth="1.10"><img src="assets/img/illustrations/20150115_131654.jpg" alt="20150115 131654" data-full="assets/img/illustrations/20150115_131654.jpg" data-cap="20150115 131654" loading="lazy" decoding="async"></figure>
+        <figure class="sgal-item" data-depth="0.90"><img src="assets/img/illustrations/20150115_131703.jpg" alt="20150115 131703" data-full="assets/img/illustrations/20150115_131703.jpg" data-cap="20150115 131703" loading="lazy" decoding="async"></figure>
+        <figure class="sgal-item" data-depth="1.00"><img src="assets/img/illustrations/20150115_131713.jpg" alt="20150115 131713" data-full="assets/img/illustrations/20150115_131713.jpg" data-cap="20150115 131713" loading="lazy" decoding="async"></figure>
+        </div>
+      </div>
+      <div class="sgal-step" data-step="3">
+        <div class="sgal-copy">
+          <p class="sgal-num" aria-hidden="true">04</p>
+          <p class="sgal-kicker">Gallery &mdash; World 04 / 06</p>
+          <h3 class="sgal-title">Characters</h3>
+          <p class="sgal-text">A Pixar-style 3D cast — original faces and worlds from the character storyboard series.</p>
+          <p class="sgal-hint">Click any piece for the larger view</p>
+        </div>
+        <div class="sgal-row">
+        <figure class="sgal-item" data-depth="0.90"><img src="assets/img/characters/039-arivan-the-last-sentinel.jpg" alt="039 arivan the last sentinel" data-full="assets/img/characters/039-arivan-the-last-sentinel.jpg" data-cap="039 arivan the last sentinel"></figure>
+        <figure class="sgal-item" data-depth="1.00"><img src="assets/img/characters/076-luna-rae.jpg" alt="076 luna rae" data-full="assets/img/characters/076-luna-rae.jpg" data-cap="076 luna rae"></figure>
+        <figure class="sgal-item" data-depth="1.10"><img src="assets/img/characters/077-kael.jpg" alt="077 kael" data-full="assets/img/characters/077-kael.jpg" data-cap="077 kael" loading="lazy" decoding="async"></figure>
+        <figure class="sgal-item" data-depth="0.90"><img src="assets/img/characters/078-milo.jpg" alt="078 milo" data-full="assets/img/characters/078-milo.jpg" data-cap="078 milo" loading="lazy" decoding="async"></figure>
+        <figure class="sgal-item" data-depth="1.00"><img src="assets/img/characters/084-niko.jpg" alt="084 niko" data-full="assets/img/characters/084-niko.jpg" data-cap="084 niko" loading="lazy" decoding="async"></figure>
+        </div>
+      </div>
+      <div class="sgal-step" data-step="4">
+        <div class="sgal-copy">
+          <p class="sgal-num" aria-hidden="true">05</p>
+          <p class="sgal-kicker">Gallery &mdash; World 05 / 06</p>
+          <h3 class="sgal-title">Photos</h3>
+          <p class="sgal-text">Through the lens, not the prompt — portraits and frames from the camera.</p>
+          <p class="sgal-hint">Click any piece for the larger view</p>
+        </div>
+        <div class="sgal-row">
+        <figure class="sgal-item" data-depth="0.90"><img src="assets/img/photos/photo-106.jpg" alt="photo 106" data-full="assets/img/photos/photo-106.jpg" data-cap="photo 106"></figure>
+        <figure class="sgal-item" data-depth="1.00"><img src="assets/img/photos/photo-137.jpg" alt="photo 137" data-full="assets/img/photos/photo-137.jpg" data-cap="photo 137"></figure>
+        <figure class="sgal-item" data-depth="1.10"><img src="assets/img/photos/photo-144.jpg" alt="photo 144" data-full="assets/img/photos/photo-144.jpg" data-cap="photo 144" loading="lazy" decoding="async"></figure>
+        <figure class="sgal-item" data-depth="0.90"><img src="assets/img/photos/photo-156.jpg" alt="photo 156" data-full="assets/img/photos/photo-156.jpg" data-cap="photo 156" loading="lazy" decoding="async"></figure>
+        <figure class="sgal-item" data-depth="1.00"><img src="assets/img/photos/photo-162.jpg" alt="photo 162" data-full="assets/img/photos/photo-162.jpg" data-cap="photo 162" loading="lazy" decoding="async"></figure>
+        </div>
+      </div>
+      <div class="sgal-step" data-step="5">
+        <div class="sgal-copy">
+          <p class="sgal-num" aria-hidden="true">06</p>
+          <p class="sgal-kicker">Gallery &mdash; World 06 / 06</p>
+          <h3 class="sgal-title">Murals</h3>
+          <p class="sgal-text">Walls that talk — large-scale pieces painted big, out in the real world.</p>
+          <p class="sgal-hint">Click any piece for the larger view</p>
+        </div>
+        <div class="sgal-row">
+        <figure class="sgal-item" data-depth="0.90"><img src="assets/img/murals/20170805_154601.jpg" alt="20170805 154601" data-full="assets/img/murals/20170805_154601.jpg" data-cap="20170805 154601"></figure>
+        <figure class="sgal-item" data-depth="1.00"><img src="assets/img/murals/20170813_130427.jpg" alt="20170813 130427" data-full="assets/img/murals/20170813_130427.jpg" data-cap="20170813 130427"></figure>
+        <figure class="sgal-item" data-depth="1.10"><img src="assets/img/murals/20170813_130459.jpg" alt="20170813 130459" data-full="assets/img/murals/20170813_130459.jpg" data-cap="20170813 130459" loading="lazy" decoding="async"></figure>
+        <figure class="sgal-item" data-depth="0.90"><img src="assets/img/murals/20170813_130633.jpg" alt="20170813 130633" data-full="assets/img/murals/20170813_130633.jpg" data-cap="20170813 130633" loading="lazy" decoding="async"></figure>
+        <figure class="sgal-item" data-depth="1.00"><img src="assets/img/murals/20180418_142632.jpg" alt="20180418 142632" data-full="assets/img/murals/20180418_142632.jpg" data-cap="20180418 142632" loading="lazy" decoding="async"></figure>
+        </div>
+      </div>
+      <div class="sgal-progress" aria-hidden="true"><span id="sgal-bar"></span></div>
     </div>
-    <div class="album-caption" id="album-caption"></div>
   </div>
 </section>
 
@@ -267,6 +355,6 @@
 </div>
 <div id="cursor-ring"></div><div id="cursor-dot"></div>
 <script src="vendor/three.min.js"></script>
-<script src="js/main.js?v=10"></script>
+<script src="js/main.js?v=11"></script>
 </body>
 </html>
