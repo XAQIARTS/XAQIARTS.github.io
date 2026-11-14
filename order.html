@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-60S3D77TRK"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-60S3D77TRK');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order a Custom Piece — XAQI arts</title>
+<meta name="description" content="Order a custom sketch, painting, photo shoot or professional video from Saqib Maqbool Khan (XAQI arts). Tell us what you want made — we confirm on WhatsApp.">
+<meta name="keywords" content="xaqiarts, XAQI arts, custom painting order, custom sketch, photography, videography, Saqib Maqbool Khan">
+<link rel="icon" type="image/png" href="assets/logo/logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Playfair+Display:ital,wght@0,700;0,900;1,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=9">
+</head>
+<body>
+
+<div class="float-orb fo1" aria-hidden="true"></div>
+<div class="float-orb fo2" aria-hidden="true"></div>
+<div class="float-orb fo3" aria-hidden="true"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="nav-brand"><img src="assets/logo/logo.png" alt="XAQI arts"><span>XAQI ARTS</span></a>
+  <div class="nav-links">
+    <a href="index.html#about">About</a>
+    <a href="index.html#ai-work">AI Work</a>
+    <a href="index.html#gallery">Gallery</a>
+    <a href="shop.html">Shop</a>
+    <a href="order.html" class="active">Order</a>
+    <a href="index.html#portfolio">Portfolio</a>
+    <a href="articles/">Articles</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <button id="theme-toggle" aria-label="Toggle light / dark theme">◐</button>
+</nav>
+
+<!-- ORDER -->
+<section class="section page-head">
+  <div class="wrap">
+    <p class="sec-kicker reveal">Order</p>
+    <h1 class="sec-title reveal">Order a <em>custom piece</em></h1>
+    <p class="sec-lead reveal">A sketch, a painting, a photo shoot or a professional video — tell us what you want made and we will confirm on WhatsApp.</p>
+
+    <div id="artwork-note" class="artwork-note" style="display:none"></div>
+
+    <form id="order-form" class="order-form reveal" novalidate>
+      <div id="order-error" class="order-error" style="display:none" role="alert"></div>
+      <div class="form-row">
+        <div class="field">
+          <label for="cust-name">Full name <span class="req">*</span></label>
+          <input id="cust-name" name="customer_name" type="text" required autocomplete="name" placeholder="Your full name">
+        </div>
+        <div class="field">
+          <label for="cust-phone">Phone / WhatsApp <span class="req">*</span></label>
+          <input id="cust-phone" name="phone" type="tel" required autocomplete="tel" placeholder="03XX XXXXXXX">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="field">
+          <label for="cust-email">Email (optional)</label>
+          <input id="cust-email" name="email" type="email" autocomplete="email" placeholder="you@example.com">
+        </div>
+        <div class="field">
+          <label for="service-type">Service type <span class="req">*</span></label>
+          <select id="service-type" name="service_type" required>
+            <option value="Custom Sketch">Custom Sketch</option>
+            <option value="Custom Painting">Custom Painting</option>
+            <option value="Photography">Photography</option>
+            <option value="Professional Videography">Professional Videography</option>
+            <option value="Other">Other</option>
+          </select>
+          <p class="hint">Service list loads from the studio catalogue when available.</p>
+        </div>
+      </div>
+      <div class="field">
+        <label for="cust-details">Details <span class="req">*</span></label>
+        <textarea id="cust-details" name="details" required placeholder="Size, colours, subject, reference — anything that helps us make it right."></textarea>
+      </div>
+      <div class="field">
+        <label for="cust-budget">Budget in PKR (optional)</label>
+        <input id="cust-budget" name="budget_pkr" type="number" min="0" step="500" inputmode="numeric" placeholder="e.g. 15000">
+      </div>
+      <button id="order-submit" class="btn btn-primary" type="submit">Place order</button>
+    </form>
+
+    <div id="order-success" class="order-success" style="display:none">
+      <h2>Order received!</h2>
+      <p>Thank you — your order is with the studio. We will confirm it on WhatsApp shortly.</p>
+      <p><a id="order-whatsapp" class="btn btn-primary" href="https://wa.me/923155296859" target="_blank" rel="noopener">Continue on WhatsApp</a></p>
+      <p>Reference photo ho to WhatsApp par bhej den.</p>
+      <p><a href="shop.html" class="btn btn-ghost">Back to the shop</a></p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <img src="assets/logo/logo.png" alt="XAQI arts logo" class="foot-logo">
+    <p>© 2026 Saqib Maqbool Khan · XAQI arts — crafted with open-source tools. This site's code is public on GitHub.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="js/supabase-config.js"></script>
+<script src="js/site.js"></script>
+<script src="js/order.js"></script>
+</body>
+</html>
